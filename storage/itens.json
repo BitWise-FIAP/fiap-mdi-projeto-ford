@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "nome": "Mochila preta",
+    "descricao": "Mochila com cadernos e estojo dentro",
+    "local_perdido": "Biblioteca",
+    "data": "2026-03-20",
+    "imagem": "mochila"
+  },
+  {
+    "id": 2,
+    "nome": "Caderno azul",
+    "descricao": "Caderno universitário com anotações de cálculo",
+    "local_perdido": "Sala de aula B203",
+    "data": "2026-03-18",
+    "imagem": "caderno"
+  },
+  {
+    "id": 3,
+    "nome": "Fone de ouvido",
+    "descricao": "Fone preto sem fio (apenas um lado)",
+    "local_perdido": "Laboratório de informática",
+    "data": "2026-03-15",
+    "imagem": "fone"
+  },
+  {
+    "id": 4,
+    "nome": "Garrafa de água",
+    "descricao": "Garrafa vermelha reutilizável",
+    "local_perdido": "Quadra / área esportiva",
+    "data": "2026-03-10",
+    "imagem": "garrafa"
+  },
+  {
+    "id": 5,
+    "nome": "Casaco cinza",
+    "descricao": "Moletom esquecido",
+    "local_perdido": "Cantina",
+    "data": "2026-03-12",
+    "imagem": "casaco"
+  }
+]
