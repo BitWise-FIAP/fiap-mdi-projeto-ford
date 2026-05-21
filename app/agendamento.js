@@ -25,13 +25,13 @@ export default function Agendamento() {
       <StatusBar barStyle="light-content" backgroundColor="#020B24" />
 
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        {/* <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
 
         <Text style={styles.headerTitle}>Agendar serviço</Text>
 
-        <View style={{ width: 24 }} />
+        <View style={{ width: 24 }} /> */}
       </View>
 
       <Text style={styles.sectionTitle}>Serviço selecionado</Text>
@@ -118,8 +118,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#020B24',
-    paddingHorizontal: 24,
-    paddingTop: 54,
+    paddingHorizontal: 16,
   },
 
   header: {
@@ -268,7 +267,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#087BFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 30,
+    marginBottom: 50,
   },
 
   confirmButtonText: {

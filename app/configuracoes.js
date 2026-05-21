@@ -24,7 +24,7 @@ export default function Configuracoes() {
 
       <View style={styles.highlightCard}>
         <View style={styles.highlightIcon}>
-          <Ionicons name="settings-outline" size={24} color="#E83D84" />
+          <Ionicons name="settings-outline" size={24} color="#1D7DFF" />
         </View>
 
         <View style={styles.highlightTextArea}>
@@ -41,7 +41,7 @@ export default function Configuracoes() {
         <View style={styles.settingRow}>
           <View style={styles.settingLeft}>
             <View style={styles.iconBox}>
-              <Ionicons name="notifications-outline" size={20} color="#E83D84" />
+              <Ionicons name="notifications-outline" size={20} color="#1D7DFF" />
             </View>
             <View>
               <Text style={[styles.settingTitle, { color: tema.texto }]}>Notificações</Text>
@@ -52,8 +52,8 @@ export default function Configuracoes() {
           <Switch
             value={notificacoes}
             onValueChange={setNotificacoes}
-            trackColor={{ false: '#D9D9D9', true: '#F7A9C9' }}
-            thumbColor={notificacoes ? '#E83D84' : '#F4F4F4'}
+            trackColor={{ false: '#D9D9D9', true: '#d9e6f8' }}
+            thumbColor={notificacoes ? '#1D7DFF' : '#F4F4F4'}
           />
         </View>
 
@@ -62,10 +62,10 @@ export default function Configuracoes() {
         <View style={styles.settingRow}>
           <View style={styles.settingLeft}>
             <View style={styles.iconBox}>
-              <Ionicons name="moon-outline" size={20} color="#E83D84" />
+              <Ionicons name="moon-outline" size={20} color="#1D7DFF" />
             </View>
             <View>
-              <Text style={[styles.settingTitle, { color: tema.texto }]}>Modo escuro</Text>
+              <Text style={[styles.settingTitle, { color: tema.texto }]}>Modo Claro</Text>
               <Text style={styles.settingSubtitle}>Alterar a aparência visual do app</Text>
             </View>
           </View>
@@ -73,8 +73,8 @@ export default function Configuracoes() {
           <Switch
             value={modoEscuro}
             onValueChange={alternarTema}
-            trackColor={{ false: '#D9D9D9', true: '#F7A9C9' }}
-            thumbColor={modoEscuro ? '#E83D84' : '#F4F4F4'}
+            trackColor={{ false: '#D9D9D9', true: '#d9e6f8' }}
+            thumbColor={modoEscuro ? '#1D7DFF' : '#F4F4F4'}
           />
         </View>
 
@@ -83,7 +83,7 @@ export default function Configuracoes() {
         <View style={styles.settingRow}>
           <View style={styles.settingLeft}>
             <View style={styles.iconBox}>
-              <Ionicons name="location-outline" size={20} color="#E83D84" />
+              <Ionicons name="location-outline" size={20} color="#1D7DFF" />
             </View>
             <View>
               <Text style={[styles.settingTitle, { color: tema.texto }]}>Localização</Text>
@@ -94,8 +94,8 @@ export default function Configuracoes() {
           <Switch
             value={localizacao}
             onValueChange={setLocalizacao}
-            trackColor={{ false: '#D9D9D9', true: '#F7A9C9' }}
-            thumbColor={localizacao ? '#E83D84' : '#F4F4F4'}
+            trackColor={{ false: '#D9D9D9', true: '#d9e6f8' }}
+            thumbColor={localizacao ? '#1D7DFF' : '#F4F4F4'}
           />
         </View>
       </View>
@@ -105,7 +105,7 @@ export default function Configuracoes() {
       <TouchableOpacity style={[styles.optionCard, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.85}>
         <View style={styles.optionLeft}>
           <View style={styles.iconBox}>
-            <Ionicons name="person-outline" size={20} color="#E83D84" />
+            <Ionicons name="person-outline" size={20} color="#1D7DFF" />
           </View>
           <View>
             <Text style={[styles.optionTitle, { color: tema.texto }]}>Editar dados pessoais</Text>
@@ -119,7 +119,7 @@ export default function Configuracoes() {
       <TouchableOpacity style={[styles.optionCard, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.85}>
         <View style={styles.optionLeft}>
           <View style={styles.iconBox}>
-            <Ionicons name="lock-closed-outline" size={20} color="#E83D84" />
+            <Ionicons name="lock-closed-outline" size={20} color="#1D7DFF" />
           </View>
           <View>
             <Text style={[styles.optionTitle, { color: tema.texto }]}>Alterar senha</Text>
@@ -133,7 +133,7 @@ export default function Configuracoes() {
       <TouchableOpacity style={[styles.optionCard, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.85}>
         <View style={styles.optionLeft}>
           <View style={styles.iconBox}>
-            <Ionicons name="shield-checkmark-outline" size={20} color="#E83D84" />
+            <Ionicons name="shield-checkmark-outline" size={20} color="#1D7DFF" />
           </View>
           <View>
             <Text style={[styles.optionTitle, { color: tema.texto }]}>Privacidade</Text>
@@ -145,7 +145,7 @@ export default function Configuracoes() {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.logoutButton} activeOpacity={0.85}>
-        <Ionicons name="trash-outline" size={18} color="#E83D84" />
+        <Ionicons name="trash-outline" size={18} color="#1D7DFF" />
         <Text style={styles.logoutText}>Desativar conta</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -176,14 +176,14 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   highlightCard: {
-    backgroundColor: '#FFF1F8',
+    backgroundColor: '#d9e6f8',
     borderRadius: 18,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: '#FFD3E8',
+    borderColor: '#1D7DFF',
   },
   highlightIcon: {
     width: 46,
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 14,
-    backgroundColor: '#FFF0F7',
+    backgroundColor: '#d9e6f8',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -287,17 +287,17 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     marginTop: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#d9e6f8',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#FFD3E8',
+    borderColor: '#1D7DFF',
     height: 54,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   logoutText: {
-    color: '#E83D84',
+    color: '#1D7DFF',
     fontSize: 15,
     fontWeight: '700',
     marginLeft: 8,

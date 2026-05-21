@@ -73,6 +73,19 @@
             headerShown: true,
           }}
         />
+
+        <Stack.Screen
+          name="agendamento"
+          options={{
+            headerShown: true,
+            title: 'Agendamento',
+            headerStyle: {
+              backgroundColor: '#020B24',
+            },
+            headerTintColor: '#FFFFFF',
+            headerShadowVisible: false,
+          }}
+        />
         
         <Stack.Screen name="(auth)/index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />

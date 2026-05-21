@@ -41,7 +41,7 @@ export default function Historico() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header}>
-        <Text style={[styles.title, {color: tema.texto}]}>Histórico de solicitações</Text>
+        <Text style={[styles.title, {color: tema.texto}]}>Histórico de Revisões</Text>
         <Text style={styles.subtitle}>
           Acompanhe o andamento das suas solicitações de retirada de itens.
         </Text>

@@ -1,45 +1,48 @@
 import { useState, useEffect } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
-  ActivityIndicator, StyleSheet, ScrollView, Alert
+  ActivityIndicator, StyleSheet, ScrollView, Alert, StatusBar
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
- 
-// ⚠️ Substitua pela sua chave do console.groq.com
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+
 const GROQ_API_KEY = 'gsk_SUA_CHAVE_AQUI';
- 
-// 🎖️ Lógica de badges — quanto mais pontos, maior o prestígio
+
 const calcularBadge = (pontos) => {
   if (pontos >= 100) return { emoji: '🏎️', titulo: 'Motor Expert' };
-  if (pontos >= 50)  return { emoji: '🔧', titulo: 'Mecânico Digital' };
-  if (pontos >= 20)  return { emoji: '📊', titulo: 'Analista Iniciante' };
+  if (pontos >= 50) return { emoji: '🔧', titulo: 'Mecânico Digital' };
+  if (pontos >= 20) return { emoji: '📊', titulo: 'Analista Iniciante' };
   return { emoji: '🚗', titulo: 'Piloto de Garagem' };
 };
- 
+
+const getBadgeIcon = (pontos) => {
+  if (pontos >= 100) return 'car-sports';
+  if (pontos >= 50) return 'tools';
+  if (pontos >= 20) return 'chart-bar';
+  return 'car';
+};
+
 export default function IA() {
-  const [veiculo1, setVeiculo1]     = useState('');
-  const [veiculo2, setVeiculo2]     = useState('');
-  const [analise, setAnalise]       = useState('');
-  const [insight, setInsight]       = useState('');
+  const [veiculo1, setVeiculo1] = useState('');
+  const [veiculo2, setVeiculo2] = useState('');
+  const [analise, setAnalise] = useState('');
+  const [insight, setInsight] = useState('');
   const [carregando, setCarregando] = useState(false);
-  const [pontos, setPontos]         = useState(0);
- 
-  // 💾 Carrega pontos salvos ao abrir o app
+  const [pontos, setPontos] = useState(0);
+
   useEffect(() => {
     AsyncStorage.getItem('pontos').then(valor => {
       if (valor) setPontos(parseInt(valor));
     });
   }, []);
- 
-  // ➕ Adiciona pontos e persiste no AsyncStorage
+
   const adicionarPontos = async (quantidade) => {
     const novoTotal = pontos + quantidade;
     setPontos(novoTotal);
     await AsyncStorage.setItem('pontos', String(novoTotal));
     return novoTotal;
   };
- 
-  // 🤖 Função genérica de chamada ao Llama via Groq
+
   const chamarLlama = async (prompt) => {
     const resposta = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -56,163 +59,384 @@ export default function IA() {
         max_tokens: 200,
       }),
     });
+
     const dados = await resposta.json();
     return dados.choices[0].message.content;
   };
- 
-  // 🔍 Ação principal: comparar + gamificar
+
   const comparar = async () => {
     if (!veiculo1 || !veiculo2) {
       Alert.alert('Ops!', 'Preencha os dois veículos 🚗');
       return;
     }
- 
+
     setCarregando(true);
     setAnalise('');
     setInsight('');
- 
+
     try {
-      // 1️⃣ Pede a análise comparativa ao Llama
       const promptAnalise = `
         Compare ${veiculo1} vs ${veiculo2}.
         Diga qual é melhor para uso urbano e qual para off-road.
         Seja direto, máximo 3 linhas.
       `;
+
       const textoAnalise = await chamarLlama(promptAnalise);
       setAnalise(textoAnalise);
- 
-      // 2️⃣ Adiciona pontos pela comparação (+10 pts)
+
       const totalAtualizado = await adicionarPontos(10);
- 
-      // 3️⃣ Pede um insight motivador personalizado com pontos atuais
+
       const promptInsight = `
         O usuário comparou ${veiculo1} vs ${veiculo2} e agora tem ${totalAtualizado} pontos.
         Gere UMA frase curta e animada incentivando a continuar pesquisando.
         Use emojis e mencione os veículos. Máximo 1 linha.
       `;
+
       const textoInsight = await chamarLlama(promptInsight);
       setInsight(textoInsight);
- 
+
     } catch (erro) {
       Alert.alert('Erro', 'Não consegui conectar à IA 😢\nVerifique sua chave Groq.');
     } finally {
       setCarregando(false);
     }
   };
- 
+
   const badge = calcularBadge(pontos);
- 
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
- 
-      {/* ===== 🏆 PAINEL DE GAMIFICAÇÃO ===== */}
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <StatusBar barStyle="light-content" backgroundColor="#020B24" />
+
+      <Text style={styles.headerTitle}>IA</Text>
+
       <View style={styles.painelGamificacao}>
-        <Text style={styles.badgeEmoji}>{badge.emoji}</Text>
-        <Text style={styles.badgeTitulo}>{badge.titulo}</Text>
-        <Text style={styles.pontosTexto}>⭐ {pontos} pontos</Text>
-        <Text style={styles.proximoBadge}>
-          {pontos < 20  && `Faltam ${20 - pontos} pts para 📊 Analista`}
-          {pontos >= 20 && pontos < 50  && `Faltam ${50 - pontos} pts para 🔧 Mecânico`}
-          {pontos >= 50 && pontos < 100 && `Faltam ${100 - pontos} pts para 🏎️ Motor Expert`}
-          {pontos >= 100 && '🏆 Nível máximo atingido!'}
-        </Text>
+        <View style={styles.badgeIconContainer}>
+          <MaterialCommunityIcons
+            name={getBadgeIcon(pontos)}
+            size={36}
+            color="#FFFFFF"
+          />
+        </View>
+
+        <View style={styles.badgeInfo}>
+          <Text style={styles.badgeLabel}>Seu nível</Text>
+          <Text style={styles.badgeTitulo}>{badge.titulo}</Text>
+          <Text style={styles.proximoBadge}>
+            {pontos < 20 && `Faltam ${20 - pontos} pts para Analista`}
+            {pontos >= 20 && pontos < 50 && `Faltam ${50 - pontos} pts para Mecânico`}
+            {pontos >= 50 && pontos < 100 && `Faltam ${100 - pontos} pts para Motor Expert`}
+            {pontos >= 100 && 'Nível máximo atingido!'}
+          </Text>
+        </View>
+
+        <View style={styles.pontosBox}>
+          <Ionicons name="star" size={18} color="#78F34D" />
+          <Text style={styles.pontosTexto}>{pontos}</Text>
+          <Text style={styles.pontosLabel}>pts</Text>
+        </View>
       </View>
- 
-      <Text style={styles.titulo}>🚗 Comparador IA</Text>
-      <Text style={styles.subtitulo}>Powered by Llama + Groq • +10 pts por comparação</Text>
- 
-      {/* ===== INPUTS ===== */}
-      <TextInput
-        style={styles.input}
-        placeholder="Veículo 1 (ex: Ford Ranger Raptor)"
-        value={veiculo1}
-        onChangeText={setVeiculo1}
-      />
- 
-      <Text style={styles.vs}>⚔️ VS ⚔️</Text>
- 
-      <TextInput
-        style={styles.input}
-        placeholder="Veículo 2 (ex: Toyota Hilux)"
-        value={veiculo2}
-        onChangeText={setVeiculo2}
-      />
- 
-      {/* ===== BOTÃO ===== */}
+
+      <View style={styles.tituloBox}>
+        <MaterialCommunityIcons name="robot-outline" size={30} color="#2F8CFF" />
+        <Text style={styles.titulo}>Comparador IA</Text>
+      </View>
+
+      <Text style={styles.subtitulo}>
+        Powered by Llama + Groq • +10 pts por comparação
+      </Text>
+
+      <View style={styles.inputBox}>
+        <Ionicons name="car-sport-outline" size={20} color="#8C99B2" style={styles.inputIcon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Veículo 1 (ex: Ford Ranger Raptor)"
+          placeholderTextColor="#8C99B2"
+          value={veiculo1}
+          onChangeText={setVeiculo1}
+        />
+      </View>
+
+      <View style={styles.vsContainer}>
+        <View style={styles.vsLine} />
+        <Text style={styles.vs}>VS</Text>
+        <View style={styles.vsLine} />
+      </View>
+
+      <View style={styles.inputBox}>
+        <Ionicons name="car-outline" size={20} color="#8C99B2" style={styles.inputIcon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Veículo 2 (ex: Toyota Hilux)"
+          placeholderTextColor="#8C99B2"
+          value={veiculo2}
+          onChangeText={setVeiculo2}
+        />
+      </View>
+
       <TouchableOpacity style={styles.botao} onPress={comparar} disabled={carregando}>
-        <Text style={styles.botaoTexto}>
-          {carregando ? '⏳ Analisando...' : '🔍 Comparar com IA (+10 pts)'}
-        </Text>
+        {carregando ? (
+          <ActivityIndicator color="#FFFFFF" />
+        ) : (
+          <>
+            <Ionicons name="search-outline" size={19} color="#FFFFFF" style={styles.botaoIcon} />
+            <Text style={styles.botaoTexto}>Comparar com IA (+10 pts)</Text>
+          </>
+        )}
       </TouchableOpacity>
- 
-      {carregando && <ActivityIndicator size="large" color="#003087" style={{ marginTop: 16 }} />}
- 
-      {/* ===== RESULTADO DA ANÁLISE ===== */}
+
       {analise ? (
         <View style={styles.card}>
-          <Text style={styles.cardTitulo}>🤖 Análise do Llama:</Text>
+          <View style={styles.cardHeader}>
+            <MaterialCommunityIcons name="brain" size={22} color="#2F8CFF" />
+            <Text style={styles.cardTitulo}>Análise da IA</Text>
+          </View>
+
           <Text style={styles.cardTexto}>{analise}</Text>
         </View>
       ) : null}
- 
-      {/* ===== INSIGHT MOTIVADOR (gerado pela IA com contexto de pontos) ===== */}
+
       {insight ? (
         <View style={styles.cardInsight}>
+          <View style={styles.cardHeader}>
+            <Ionicons name="sparkles-outline" size={21} color="#78F34D" />
+            <Text style={styles.cardInsightTitulo}>Insight motivador</Text>
+          </View>
+
           <Text style={styles.cardInsightTexto}>{insight}</Text>
-          <Text style={styles.cardInsightPontos}>+10 pts adicionados! Total: ⭐ {pontos}</Text>
+          <Text style={styles.cardInsightPontos}>+10 pts adicionados! Total: {pontos} pts</Text>
         </View>
       ) : null}
- 
     </ScrollView>
   );
 }
- 
+
 const styles = StyleSheet.create({
-  container: { padding: 24, backgroundColor: '#F0F4FF', alignItems: 'center' },
- 
-  // Painel de gamificação
+  container: {
+    flexGrow: 1,
+    backgroundColor: '#020B24',
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 120
+  },
+
+  headerTitle: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: '900',
+    marginBottom: 20,
+    textAlign:"center"
+  },
+
   painelGamificacao: {
-    backgroundColor: '#003087', borderRadius: 16, padding: 16,
-    width: '100%', alignItems: 'center', marginTop: 40, marginBottom: 24,
+    width: '100%',
+    backgroundColor: '#071B3B',
+    borderRadius: 16,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 28,
+    borderWidth: 1,
+    borderColor: '#123763',
   },
-  badgeEmoji:    { fontSize: 40 },
-  badgeTitulo:   { color: '#FFD700', fontSize: 18, fontWeight: 'bold', marginTop: 4 },
-  pontosTexto:   { color: '#fff', fontSize: 22, fontWeight: 'bold', marginTop: 4 },
-  proximoBadge:  { color: '#aac4ff', fontSize: 12, marginTop: 6, textAlign: 'center' },
- 
-  // Cabeçalho
-  titulo:    { fontSize: 26, fontWeight: 'bold', color: '#003087', marginBottom: 4 },
-  subtitulo: { fontSize: 13, color: '#666', marginBottom: 20, textAlign: 'center' },
- 
-  // Inputs
+
+  badgeIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: '#087BFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 14,
+  },
+
+  badgeInfo: {
+    flex: 1,
+  },
+
+  badgeLabel: {
+    color: '#2F8CFF',
+    fontSize: 12,
+    fontWeight: '800',
+    marginBottom: 3,
+  },
+
+  badgeTitulo: {
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '900',
+    marginBottom: 5,
+  },
+
+  proximoBadge: {
+    color: '#9AA8BF',
+    fontSize: 11,
+    fontWeight: '600',
+  },
+
+  pontosBox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  pontosTexto: {
+    color: '#78F34D',
+    fontSize: 28,
+    fontWeight: '900',
+    marginTop: 2,
+  },
+
+  pontosLabel: {
+    color: '#9AA8BF',
+    fontSize: 11,
+    fontWeight: '700',
+    marginTop: -2,
+  },
+
+  tituloBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+
+  titulo: {
+    fontSize: 25,
+    fontWeight: '900',
+    color: '#FFFFFF',
+    marginLeft: 8,
+  },
+
+  subtitulo: {
+    fontSize: 13,
+    color: '#9AA8BF',
+    marginBottom: 24,
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+
+  inputBox: {
+    width: '100%',
+    height: 52,
+    backgroundColor: '#071B3B',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#1D3B63',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    marginBottom: 12,
+  },
+
+  inputIcon: {
+    marginRight: 10,
+  },
+
   input: {
-    width: '100%', backgroundColor: '#fff', borderRadius: 10,
-    padding: 14, fontSize: 16, borderWidth: 1, borderColor: '#ddd', marginBottom: 8,
+    flex: 1,
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
   },
-  vs: { fontSize: 22, fontWeight: 'bold', marginVertical: 8, color: '#CC0000' },
- 
-  // Botão
+
+  vsContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 6,
+  },
+
+  vsLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#1D3B63',
+  },
+
+  vs: {
+    color: '#2F8CFF',
+    fontSize: 18,
+    fontWeight: '900',
+    marginHorizontal: 14,
+  },
+
   botao: {
-    backgroundColor: '#003087', borderRadius: 10, padding: 16,
-    width: '100%', alignItems: 'center', marginTop: 8,
+    width: '100%',
+    height: 52,
+    backgroundColor: '#087BFF',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginTop: 10,
   },
-  botaoTexto: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
- 
-  // Card de análise
+
+  botaoIcon: {
+    marginRight: 8,
+  },
+
+  botaoTexto: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '900',
+  },
+
   card: {
-    backgroundColor: '#fff', borderRadius: 12, padding: 16,
-    marginTop: 20, width: '100%',
-    borderLeftWidth: 4, borderLeftColor: '#003087',
+    width: '100%',
+    backgroundColor: '#071B3B',
+    borderRadius: 14,
+    padding: 16,
+    marginTop: 22,
+    borderWidth: 1,
+    borderColor: '#123763',
   },
-  cardTitulo: { fontSize: 15, fontWeight: 'bold', color: '#003087', marginBottom: 8 },
-  cardTexto:  { fontSize: 14, color: '#333', lineHeight: 22 },
- 
-  // Card de insight motivador (dourado = recompensa visual)
+
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+
+  cardTitulo: {
+    color: '#2F8CFF',
+    fontSize: 15,
+    fontWeight: '900',
+    marginLeft: 8,
+  },
+
+  cardTexto: {
+    color: '#D9DEEA',
+    fontSize: 14,
+    lineHeight: 22,
+    fontWeight: '600',
+  },
+
   cardInsight: {
-    backgroundColor: '#FFD700', borderRadius: 12, padding: 16,
-    marginTop: 12, width: '100%', alignItems: 'center',
+    width: '100%',
+    backgroundColor: '#052B68',
+    borderRadius: 14,
+    padding: 16,
+    marginTop: 14,
+    borderWidth: 1,
+    borderColor: '#087BFF',
   },
-  cardInsightTexto:  { fontSize: 14, color: '#003087', fontWeight: 'bold', textAlign: 'center' },
-  cardInsightPontos: { fontSize: 13, color: '#333', marginTop: 8 },
+
+  cardInsightTitulo: {
+    color: '#78F34D',
+    fontSize: 15,
+    fontWeight: '900',
+    marginLeft: 8,
+  },
+
+  cardInsightTexto: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700',
+    lineHeight: 21,
+  },
+
+  cardInsightPontos: {
+    color: '#2F8CFF',
+    fontSize: 13,
+    fontWeight: '900',
+    marginTop: 10,
+  },
 });
- 
