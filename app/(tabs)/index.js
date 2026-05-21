@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 
-import CardPerdido from '../../components/CardPerdido';
+
+import CardPerdido from '../../components/CardAgendamento';
 import CardHome from '../../components/CardHome';
 import Carossel from '../../components/Carrossel';
 
@@ -39,7 +40,7 @@ export default function Home() {
     <ScrollView style={[styles.container, { backgroundColor: tema.fundo }]} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <View style={[styles.header, { backgroundColor: tema.fundo }]}>
         <Text style={[styles.title, { color: tema.texto }]}>Olá, {userName}</Text>
-        <Image source={require('../../assets/fiap-logo.png')} style={styles.logo}/>
+        <Image source={require('../../assets/logo-ford.png')} style={styles.logo}/>
       </View>
       <CardPerdido></CardPerdido>
       <View style={styles.section}> 
@@ -49,7 +50,7 @@ export default function Home() {
       <View style={styles.section}> 
        <View style={styles.actions}>
         <CardHome
-          icon="cube-outline"
+          icon="air-filter"
           title="Cadastrar item encontrado"
           onPress={() => router.push('/cadastro')}
         />
@@ -61,7 +62,7 @@ export default function Home() {
         />
 
         <CardHome
-          icon="chatbubble-outline"
+          icon="air-filter"
           title="Falar com suporte"
           onPress={() => router.push('/suporte')}
         />

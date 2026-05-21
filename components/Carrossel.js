@@ -8,22 +8,15 @@ const itensRecentes = [
     nome: 'Chaves',
     local: 'Recepção',
     data: '08/04/2026',
-    imagem: require('../assets/chaves.jpg'),
+    imagem: require('../assets/ranger-azul.png'),
   },
   {
     id: '2',
     nome: 'Carteira',
     local: 'Biblioteca',
     data: '07/04/2026',
-    imagem: require('../assets/carteira.jpg'),
-  },
-  {
-    id: '3',
-    nome: 'Garrafa',
-    local: 'Sala 201',
-    data: '06/04/2026',
-    imagem: require('../assets/garrafa.webp'),
-  },
+    imagem: require('../assets/ranger-vermelha.png'),
+  }
 ];
 
 function ItemCard({ item, onPress }) {
@@ -59,7 +52,7 @@ export default function RecentItemsCarousel() {
   const { tema } = useTheme();
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, { color: tema.texto }]}>Itens encontrados recentemente</Text>
+      <Text style={[styles.title, { color: tema.texto }]}>Meus Carros Ford</Text>
 
       <FlatList
         data={itensRecentes}
