@@ -2,11 +2,13 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'rea
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 import CardPerdido from '../../components/CardAgendamento';
 import CardHome from '../../components/CardHome';
 import Carossel from '../../components/Carrossel';
+import CardRisco from '../../components/CardRisco';
 
 import { useTheme } from '../ThemeContext';
 
@@ -43,14 +45,24 @@ export default function Home() {
         <Image source={require('../../assets/logo-ford.png')} style={styles.logo}/>
       </View>
       <CardPerdido></CardPerdido>
+      <CardRisco></CardRisco>
       <View style={styles.section}> 
         <Carossel></Carossel>
       </View>
+
+      <TouchableOpacity style={[styles.cardPontuacao, { backgroundColor: tema.card }]}  onPress={() => router.push('/recompensas')}>
+              <View>
+                <Text style={styles.label}>Veja Sua Pontuação</Text>
+                <Text style={styles.pontos}>2.750 <Text style={styles.pts}>pts</Text></Text>
+              </View>
+      
+              <MaterialCommunityIcons name="seal-variant" size={78} color="#1D7DFF" />
+      </TouchableOpacity>
       
       <View style={styles.section}> 
        <View style={styles.actions}>
         <CardHome
-          icon="air-filter"
+          icon="cube-outline"
           title="Cadastrar item encontrado"
           onPress={() => router.push('/cadastro')}
         />
@@ -62,7 +74,7 @@ export default function Home() {
         />
 
         <CardHome
-          icon="air-filter"
+          icon="chatbubble-outline"
           title="Falar com suporte"
           onPress={() => router.push('/suporte')}
         />
@@ -95,9 +107,7 @@ const styles = StyleSheet.create({
     // marginBottom: 20,
     // marginTop: 10, 
   },
-  section: {
-    marginTop: 50,
-  },
+  
   // botao:     { backgroundColor: '#E83D84', padding: 16, borderRadius: 12, alignItems: "center" },
 
   buttonContainer: {
@@ -106,14 +116,14 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#EC0E7A',
+    backgroundColor: '#051833',
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
   },
 
   buttonText: {
-    color: '#fff',
+    color: '#1D7DFF',
     fontWeight: '600',
     fontSize: 16,
   },
@@ -131,6 +141,29 @@ logo: {
   height: 50,
   resizeMode: 'contain',
 },
- 
-  
+
+cardPontuacao: {
+    backgroundColor: '#071B3B',
+    borderRadius: 14,
+    padding: 18,
+    minHeight: 105,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+
+   label: {
+    color: '#2F8CFF',
+    fontSize: 16,
+    fontWeight: '800',
+    marginBottom: 8,
+  },
+
+   pontos: {
+    color: '#FFFFFF',
+    fontSize: 30,
+    fontWeight: '900',
+  },
+
 });

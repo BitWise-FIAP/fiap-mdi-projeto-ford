@@ -11,7 +11,7 @@ export default function TabsLayout() {
       backgroundColor: tema.card,
       borderTopColor: tema.borda,
     },
-    tabBarActiveTintColor: '#EC0E7A',
+    tabBarActiveTintColor: '#1D7DFF',
     tabBarInactiveTintColor: modoEscuro ? '#888' : '#8E8E93',
     headerStyle: {
       backgroundColor: tema.fundo,

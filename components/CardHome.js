@@ -7,7 +7,7 @@ export default function CardHome({ icon, title, onPress }) {
   return (
     <TouchableOpacity style={[styles.card, { backgroundColor: tema.card }, {borderColor: tema.borda}]} onPress={onPress} activeOpacity={0.8}>
       <View style={styles.left}>
-        <Ionicons name={icon} size={22} color="#EC0E7A" />
+        <Ionicons name={icon} size={22} color="#1D7DFF" />
         <Text style={[styles.title, { color: tema.texto }]}>{title}</Text>
       </View>
 
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 12,
+    
   },
   left: {
     flexDirection: 'row',

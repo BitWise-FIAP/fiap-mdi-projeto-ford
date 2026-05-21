@@ -3,7 +3,7 @@ import { Ionicons,  MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 
-export default function CardPerdido() {
+export default function CardAgendamento() {
   const router = useRouter();
 
   return (
@@ -16,8 +16,6 @@ export default function CardPerdido() {
         </View>
 
         <Ionicons name="calendar-outline" size={34} color="#FFFFFF" />
-        <MaterialCommunityIcons name="car-wrench" size={88} color="#AFCBFF" />
-        
       </View>
 
       <TouchableOpacity
@@ -32,10 +30,10 @@ export default function CardPerdido() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#052B68',
+    backgroundColor: '#051833',
     borderRadius: 14,
     padding: 16,
-    width: '100%',
+    width: '100%', 
   },
 
   header: {

@@ -1,8 +1,37 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ActivityIndicator } from 'react-native';
 
 export default function AuthIndex() {
   const router = useRouter();
+
+  const [verificando, setVerificando] = useState(true);
+
+  useEffect(() => {
+    const verificarLogin = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+
+      if (token) {
+        router.replace('/(tabs)');
+        return;
+      }
+
+      setVerificando(false);
+    };
+
+    verificarLogin();
+  }, []);
+
+  if (verificando) {
+  return (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator size="large" color="#087BFF" />
+    </View>
+  );
+  }
+
 
   return (
     <View style={styles.container}>

@@ -84,7 +84,7 @@ export default function Perfil() {
       <View style={[styles.infoCard, { backgroundColor: tema.card }, {borderColor: tema.borda}]}>
         <View style={styles.infoRow}>
           <View style={styles.iconBox}>
-            <Ionicons name="person-outline" size={20} color="#E83D84" />
+            <Ionicons name="person-outline" size={20} color="#1D7DFF" />
           </View>
           <View style={styles.infoTextArea}>
             <Text style={styles.infoLabel}>Nome</Text>
@@ -96,7 +96,7 @@ export default function Perfil() {
 
         <View style={styles.infoRow}>
           <View style={styles.iconBox}>
-            <Ionicons name="mail-outline" size={20} color="#E83D84" />
+            <Ionicons name="mail-outline" size={20} color="#1D7DFF" />
           </View>
           <View style={styles.infoTextArea}>
             <Text style={styles.infoLabel}>E-mail</Text>
@@ -108,7 +108,7 @@ export default function Perfil() {
 
         <View style={styles.infoRow}>
           <View style={styles.iconBox}>
-            <Ionicons name="call-outline" size={20} color="#E83D84" />
+            <Ionicons name="call-outline" size={20} color="#1D7DFF" />
           </View>
           <View style={styles.infoTextArea}>
             <Text style={styles.infoLabel}>Telefone</Text>
@@ -122,35 +122,35 @@ export default function Perfil() {
       <TouchableOpacity style={[styles.actionCard, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.85} onPress={() => router.push('/historico')}>
         <View style={styles.actionLeft}>
           <View style={styles.actionIcon}>
-            <Ionicons name="time-outline" size={20} color="#E83D84" />
+            <Ionicons name="time-outline" size={20} color="#1D7DFF" />
           </View>
           <Text style={[styles.actionText, , { color: tema.texto }]}>Histórico de solicitações</Text>
         </View>
-        <Ionicons name="chevron-forward" size={20} color="#8E8E93" />
+        <Ionicons name="chevron-forward" size={20} color="#1D7DFF" />
       </TouchableOpacity>
 
       <TouchableOpacity style={[styles.actionCard, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.85} onPress={() => router.push('/configuracoes')}>
         <View style={styles.actionLeft}>
           <View style={styles.actionIcon}>
-            <Ionicons name="settings-outline" size={20} color="#E83D84" />
+            <Ionicons name="settings-outline" size={20} color="#1D7DFF" />
           </View>
           <Text style={[styles.actionText, { color: tema.texto }]}>Configurações da conta</Text>
         </View>
-        <Ionicons name="chevron-forward" size={20} color="#8E8E93" />
+        <Ionicons name="chevron-forward" size={20} color="#1D7DFF" />
       </TouchableOpacity>
 
       <TouchableOpacity style={[styles.actionCard, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.85} onPress={() => router.push('/suporte')}>
         <View style={styles.actionLeft}>
           <View style={styles.actionIcon}>
-            <Ionicons name="help-circle-outline" size={20} color="#E83D84" />
+            <Ionicons name="help-circle-outline" size={20} color="#1D7DFF" />
           </View>
           <Text style={[styles.actionText, { color: tema.texto }]}>Ajuda e suporte</Text>
         </View>
-        <Ionicons name="chevron-forward" size={20} color="#8E8E93" />
+        <Ionicons name="chevron-forward" size={20} color="#1D7DFF" />
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.logoutButton} activeOpacity={0.85} onPress={handleLogout}>
-        <Ionicons name="log-out-outline" size={18} color="#E83D84" />
+        <Ionicons name="log-out-outline" size={18} color="#b61d1d" />
         <Text style={styles.logoutText}>Sair da conta</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -185,12 +185,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 14,
     borderWidth: 2,
-    borderColor: '#FFD3E8',
+    borderColor: '#1D7DFF',
   },
   avatarText: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#E83D84',
+    color: '#1D7DFF',
   },
   nome: {
     fontSize: 24,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   editButton: {
-    backgroundColor: '#E83D84',
+    backgroundColor: '#1D7DFF',
     borderRadius: 14,
     paddingHorizontal: 18,
     height: 42,
@@ -300,17 +300,17 @@ const styles = StyleSheet.create({
 
   logoutButton: {
     marginTop: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#051833',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#FFD3E8',
+    borderColor: '#b61d1d',
     height: 54,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   logoutText: {
-    color: '#E83D84',
+    color: '#b61d1d',
     fontSize: 15,
     fontWeight: '700',
     marginLeft: 8,

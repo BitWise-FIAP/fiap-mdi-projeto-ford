@@ -1,7 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, StatusBar } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import CardHome from '../../components/CardHome';
+
+import CardServico from '../../components/CardServicos'
 
 export default function Servicos() {
   const router = useRouter();
@@ -29,7 +30,7 @@ export default function Servicos() {
               Com base no uso do seu veículo, recomendamos a troca de óleo em breve.
             </Text>
 
-            <TouchableOpacity style={styles.botao}>
+            <TouchableOpacity style={styles.botao} onPress={() => router.push('/agendamento')}>
               <Text style={styles.botaoTexto}>Agendar agora</Text>
             </TouchableOpacity>
           </View>
@@ -39,69 +40,29 @@ export default function Servicos() {
 
         <Text style={styles.sectionTitle}>Outras recomendações</Text>
 
-        <ServicoItem
+        <CardServico
           icon="car-tire-alert"
           title="Alinhamento e balanceamento"
           subtitle="Ideal a cada 10.000 km"
         />
 
-        <ServicoItem
+        <CardServico
           icon="car-brake-alert"
           title="Verificação de freios"
           subtitle="Segurança em primeiro lugar"
         />
 
-        <ServicoItem
+        <CardServico
           icon="air-filter"
           title="Higienização do ar"
           subtitle="Mais saúde para você"
         />
-
-        <View style={styles.section}> 
-               <View style={styles.actions}>
-                <CardHome
-                    icon="car-tire-alert"
-                    title="Alinhamento e balanceamento"
-                    
-                    onPress={() => router.push('/cadastro')}
-                />
-        
-                <CardHome
-                  icon="eye-outline"
-                  title="Ver todos os itens"
-                  onPress={() => router.push('/itens')}
-                />
-        
-                <CardHome
-                    icon="air-filter"
-                    title="Higienização do ar"
-                    onPress={() => router.push('/suporte')}
-                />
-                </View>
-              </View>
       </ScrollView>
     </View>
   );
 }
 
-function ServicoItem({ icon, title, subtitle }) {
-  return (
-    <View style={styles.item}>
-      <View style={styles.itemIcon}>
-        <MaterialCommunityIcons name={icon} size={28} color="#A9B7D0" />
-      </View>
 
-      <View style={styles.itemTextos}>
-        <Text style={styles.itemTitle}>{title}</Text>
-        <Text style={styles.itemSubtitle}>{subtitle}</Text>
-      </View>
-
-      <TouchableOpacity>
-        <Text style={styles.agendar}>Agendar</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -187,42 +148,5 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  item: {
-    backgroundColor: '#071B3B',
-    borderRadius: 13,
-    paddingVertical: 15,
-    paddingHorizontal: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 11,
-  },
-
-  itemIcon: {
-    width: 42,
-    alignItems: 'center',
-    marginRight: 10,
-  },
-
-  itemTextos: {
-    flex: 1,
-  },
-
-  itemTitle: {
-    color: '#FFFFFF',
-    fontSize: 13,
-    fontWeight: '800',
-    marginBottom: 3,
-  },
-
-  itemSubtitle: {
-    color: '#8F9CB4',
-    fontSize: 11,
-    fontWeight: '700',
-  },
-
-  agendar: {
-    color: '#2F8CFF',
-    fontSize: 12,
-    fontWeight: '800',
-  },
+  
 });

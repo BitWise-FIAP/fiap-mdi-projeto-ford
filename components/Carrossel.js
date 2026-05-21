@@ -31,14 +31,14 @@ function ItemCard({ item, onPress }) {
         </Text>
 
         <View style={styles.row}>
-          <Ionicons name="location-outline" size={13} color="#EC0E7A" />
+          <Ionicons name="location-outline" size={13} color="#1D7DFF" />
           <Text style={styles.meta} numberOfLines={1}>
             {item.local}
           </Text>
         </View>
 
         <View style={styles.row}>
-          <Ionicons name="time-outline" size={13} color="#EC0E7A" />
+          <Ionicons name="time-outline" size={13} color="#1D7DFF" />
           <Text style={styles.meta}>{item.data}</Text>
         </View>
       </View>
@@ -51,8 +51,8 @@ function ItemCard({ item, onPress }) {
 export default function RecentItemsCarousel() {
   const { tema } = useTheme();
   return (
-    <View style={styles.container}>
-      <Text style={[styles.title, { color: tema.texto }]}>Meus Carros Ford</Text>
+    <View style={[styles.container, {backgroundColor: tema.card}]}>
+      <Text style={[styles.title]}>Meus Carros Ford</Text>
 
       <FlatList
         data={itensRecentes}
@@ -72,10 +72,17 @@ export default function RecentItemsCarousel() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    borderRadius: 14,
+    padding: 16,
+    width: '100%', 
+    marginTop: 20,
+    marginBottom: 20,
+  },
   title: {
     fontSize: 18,
     fontWeight: '900',
-    color: '#2B2B2B',
+    color: '#2F8CFF',
     marginBottom: 20,
   },
   listContent: {
