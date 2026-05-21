@@ -112,7 +112,7 @@ export default function Perfil() {
           </View>
           <View style={styles.infoTextArea}>
             <Text style={styles.infoLabel}>Telefone</Text>
-            <Text style={[styles.infoValue, { color: tema.texto }]}>(11) 99999-9999</Text>
+            <Text style={[styles.infoValue, { color: tema.texto }]}>{user?.telefone || '(11) 99999-9999}'}</Text>
           </View>
         </View>
       </View>

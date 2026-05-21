@@ -36,6 +36,7 @@ export default function RootLayout() {
     return (
       <ThemeProvider>
       <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(auth)/index" />
         <Stack.Screen name="(auth)/login" />
         <Stack.Screen name="(auth)/cadastro" />
       </Stack>
@@ -71,7 +72,8 @@ export default function RootLayout() {
           headerShown: true,
         }}
       />
-
+      
+      <Stack.Screen name="(auth)/index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)/cadastro" options={{ headerShown: false }} />
     </Stack>
