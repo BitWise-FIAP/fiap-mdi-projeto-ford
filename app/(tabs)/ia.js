@@ -51,13 +51,33 @@ export default function IA() {
         'Authorization': `Bearer ${GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.1-8b-instant',
-        messages: [
-          { role: 'system', content: 'Você é analista automotivo. Responda em português, direto ao ponto.' },
-          { role: 'user', content: prompt }
-        ],
-        max_tokens: 200,
-      }),
+  model: 'llama-3.1-8b-instant',
+  messages: [
+    {
+      role: 'system',
+      content: `
+Você é um especialista automotivo da Ford, integrado em um aplicativo moderno de gerenciamento veicular.
+
+Seu objetivo é fornecer comparações inteligentes, rápidas e tecnológicas entre veículos.
+
+REGRAS:
+- Responda em português do Brasil.
+- Seja objetivo.
+- Use tom moderno e premium.
+- Demonstre conhecimento automotivo real.
+- Destaque desempenho, conforto, consumo, tecnologia e uso ideal.
+- Evite respostas longas.
+- Não invente dados absurdos.
+`
+    },
+    {
+      role: 'user',
+      content: prompt
+    }
+  ],
+  max_tokens: 300,
+  temperature: 0.7,
+}),
     });
 
     const dados = await resposta.json();
@@ -76,9 +96,33 @@ export default function IA() {
 
     try {
       const promptAnalise = `
-        Compare ${veiculo1} vs ${veiculo2}.
-        Diga qual é melhor para uso urbano e qual para off-road.
-        Seja direto, máximo 3 linhas.
+        Compare os veículos "${veiculo1}" e "${veiculo2}".
+
+        Analise:
+        - desempenho
+        - conforto
+        - tecnologia
+        - consumo
+        - uso urbano
+        - estrada
+        - off-road
+
+        Explique:
+        - qual veículo é mais equilibrado
+        - qual é melhor para cidade
+        - qual é melhor para aventura/off-road
+
+        Formato da resposta:
+        🏙️ Cidade: ...
+        🛣️ Estrada: ...
+        🏕️ Off-road: ...
+        ⭐ Destaque: ...
+
+        REGRAS:
+        - máximo 5 linhas
+        - linguagem moderna
+        - tom premium
+        - resposta direta
       `;
 
       const textoAnalise = await chamarLlama(promptAnalise);
@@ -87,9 +131,21 @@ export default function IA() {
       const totalAtualizado = await adicionarPontos(10);
 
       const promptInsight = `
-        O usuário comparou ${veiculo1} vs ${veiculo2} e agora tem ${totalAtualizado} pontos.
-        Gere UMA frase curta e animada incentivando a continuar pesquisando.
-        Use emojis e mencione os veículos. Máximo 1 linha.
+        O usuário acabou de comparar os veículos ${veiculo1} e ${veiculo2} no app Ford IA.
+
+        Ele possui ${totalAtualizado} pontos no sistema de gamificação.
+
+        Gere:
+        - uma frase curta
+        - motivadora
+        - moderna
+        - estilo aplicativo premium automotivo
+
+        REGRAS:
+        - usar no máximo 1 linha
+        - mencionar um dos veículos
+        - usar emojis de forma leve
+        - incentivar o usuário a continuar explorando o app
       `;
 
       const textoInsight = await chamarLlama(promptInsight);
