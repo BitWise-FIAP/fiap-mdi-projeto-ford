@@ -17,19 +17,19 @@ export default function Configuracoes() {
     >
       <View style={styles.header}>
         <Text style={[styles.title,{ color: tema.texto }]}>Configurações da conta</Text>
-        <Text style={[styles.subtitle]}>
+        <Text style={[styles.subtitle, { color: tema.subtitulo }]}>
           Gerencie preferências, notificações e opções da sua conta.
         </Text>
       </View>
 
-      <View style={styles.highlightCard}>
+      <View style={[styles.highlightCard, { backgroundColor: tema.card, borderColor: tema.borda }]}>
         <View style={styles.highlightIcon}>
           <Ionicons name="settings-outline" size={24} color="#1D7DFF" />
         </View>
 
         <View style={styles.highlightTextArea}>
-          <Text style={styles.highlightTitle}>Personalize sua experiência</Text>
-          <Text style={styles.highlightText}>
+          <Text style={[styles.highlightTitle, { color: tema.texto }]}>Personalize sua experiência</Text>
+          <Text style={[styles.highlightText, { color: tema.subtitulo }]}>
             Ajuste as opções do aplicativo de acordo com sua preferência.
           </Text>
         </View>
@@ -176,14 +176,12 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   highlightCard: {
-    backgroundColor: '#d9e6f8',
     borderRadius: 18,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: '#1D7DFF',
   },
   highlightIcon: {
     width: 46,

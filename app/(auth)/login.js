@@ -8,8 +8,10 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../ThemeContext';
 
 export default function Login() {
+  const { tema } = useTheme();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [senhaVisivel, setSenhaVisivel] = useState(false);
@@ -51,10 +53,10 @@ export default function Login() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: tema.fundo }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <StatusBar barStyle="light-content" backgroundColor="#020B24" />
+      <StatusBar barStyle="light-content" backgroundColor={tema.fundo} />
 
       <View style={styles.content}>
         <Image
@@ -65,44 +67,44 @@ export default function Login() {
 
         <Text style={styles.titulo}>Ford {''}
           <Text style={styles.tituloAzul}>VIN</Text>
-          <Text style={styles.tituloBranco}>culo</Text>
+          <Text style={[styles.tituloBranco, { color: tema.texto }]}>culo</Text>
         </Text>
 
-        <Text style={styles.subtitulo}>Conectado com você.</Text>
+        <Text style={[styles.subtitulo, { color: tema.texto }]}>Conectado com você.</Text>
 
-        <Text style={styles.chamada}>Entre na sua conta</Text>
-        <Text style={styles.chamadaMenor}>para continuar</Text>
+        <Text style={[styles.chamada, { color: tema.texto }]}>Entre na sua conta</Text>
+        <Text style={[styles.chamadaMenor, { color: tema.subtitulo }]}>para continuar</Text>
 
-        <View style={styles.inputBox}>
-          <Ionicons name="mail-outline" size={18} color="#8C99B2" style={styles.icone}/>
+        <View style={[styles.inputBox, { backgroundColor: tema.card, borderColor: tema.borda }]}>
+          <Ionicons name="mail-outline" size={18} color={tema.subtitulo} style={styles.icone}/>
           <TextInput
             placeholder="E-mail"
-            placeholderTextColor="#8C99B2"
+            placeholderTextColor={tema.subtitulo}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
-            style={styles.input}
+            style={[styles.input, { color: tema.texto }]}
           />
         </View>
         {erros.email && <Text style={styles.erro}>{erros.email}</Text>}
 
-        <View style={styles.inputBox}>
-          <Ionicons name="lock-closed-outline" size={18} color="#8C99B2" style={styles.icone} />
+        <View style={[styles.inputBox, { backgroundColor: tema.card, borderColor: tema.borda }]}>
+          <Ionicons name="lock-closed-outline" size={18} color={tema.subtitulo} style={styles.icone} />
           <TextInput
             placeholder="Senha"
-            placeholderTextColor="#8C99B2"
+            placeholderTextColor={tema.subtitulo}
             value={senha}
             onChangeText={setSenha}
             secureTextEntry={!senhaVisivel}
-            style={styles.input}
+            style={[styles.input, { color: tema.texto }]}
           />
           <TouchableOpacity onPress={() => setSenhaVisivel(!senhaVisivel)}>
 
           <Ionicons
             name={senhaVisivel ? 'eye-off-outline' : 'eye-outline'}
             size={20}
-            color="#8C99B2"
+            color={tema.subtitulo}
           />
         </TouchableOpacity>
 
@@ -130,13 +132,13 @@ export default function Login() {
           style={styles.cadastroBotao}
           onPress={() => router.push('/(auth)/cadastro')}
         >
-          <Text style={styles.cadastroTexto}>
+          <Text style={[styles.cadastroTexto, { color: tema.subtitulo }]}>
             Ainda não tem uma conta?{' '}
             <Text style={styles.cadastroLink}>Cadastre-se</Text>
           </Text>
         </TouchableOpacity>
 
-        <Text style={styles.socialTexto}>ou entre com</Text>
+        <Text style={[styles.socialTexto, { color: tema.subtitulo }]}>ou entre com</Text>
 
         <View style={styles.socialContainer}>
           <TouchableOpacity style={styles.socialCircle}>

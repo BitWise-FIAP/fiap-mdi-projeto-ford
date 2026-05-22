@@ -22,12 +22,12 @@ export function ThemeProvider({ children }) {
   };
 
   const tema = {
-    fundo: modoEscuro ? '#1C1C1C' : '#000D24',
-    card: modoEscuro ? '#2A2A2A' : '#051833',
-    texto: modoEscuro ? '#111111' : '#FFFFFF',
-    subtitulo: modoEscuro ? '#B8B8B8' : '#666666',
-    borda: modoEscuro ? '#505050' : '#1d7bff79',
-    divisor: modoEscuro ? '#333333' : '#1d7bff81',
+    fundo: modoEscuro ? '#000D24' : '#F4F6F9',
+    card: modoEscuro ? '#051833' : '#FFFFFF',
+    texto: modoEscuro ? '#FFFFFF' : '#0A1628',
+    subtitulo: modoEscuro ? '#94A3B8' : '#6B7280',
+    borda: modoEscuro ? '#1d7bff79' : '#E2E8F0',
+    divisor: modoEscuro ? '#1d7bff33' : '#F1F5F9',
   };
 
   return (

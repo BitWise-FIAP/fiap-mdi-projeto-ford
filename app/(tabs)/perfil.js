@@ -149,9 +149,9 @@ export default function Perfil() {
         <Ionicons name="chevron-forward" size={20} color="#1D7DFF" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.logoutButton} activeOpacity={0.85} onPress={handleLogout}>
-        <Ionicons name="log-out-outline" size={18} color="#b61d1d" />
-        <Text style={styles.logoutText}>Sair da conta</Text>
+      <TouchableOpacity style={[styles.logoutButton, { backgroundColor: tema.card, borderColor: tema.borda }]} activeOpacity={0.85} onPress={handleLogout}>
+        <Ionicons name="log-out-outline" size={18} color={tema.texto} />
+        <Text style={[styles.logoutText, { color: tema.texto }]}>Sair da conta</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -300,17 +300,14 @@ const styles = StyleSheet.create({
 
   logoutButton: {
     marginTop: 8,
-    backgroundColor: '#051833',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#b61d1d',
     height: 54,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   logoutText: {
-    color: '#b61d1d',
     fontSize: 15,
     fontWeight: '700',
     marginLeft: 8,

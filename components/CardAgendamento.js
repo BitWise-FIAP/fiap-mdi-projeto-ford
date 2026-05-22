@@ -1,21 +1,22 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons,  MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-
+import { useTheme } from '../app/ThemeContext';
 
 export default function CardAgendamento() {
   const router = useRouter();
+  const { tema } = useTheme();
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: tema.card }]}>
       <View style={styles.header}>
         <View>
           <Text style={styles.label}>Próxima recomendação</Text>
-          <Text style={styles.title}>Revisão em 5.000 km</Text>
-          <Text style={styles.subtitle}>ou em 30 dias</Text>
+          <Text style={[styles.title, { color: tema.texto }]}>Revisão em 5.000 km</Text>
+          <Text style={[styles.subtitle, { color: tema.subtitulo }]}>ou em 30 dias</Text>
         </View>
 
-        <Ionicons name="calendar-outline" size={34} color="#FFFFFF" />
+        <Ionicons name="calendar-outline" size={34} color="#1D7DFF" />
       </View>
 
       <TouchableOpacity

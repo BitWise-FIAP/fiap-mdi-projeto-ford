@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTheme } from '../ThemeContext';
 
 const GROQ_API_KEY = 'gsk_SUA_CHAVE_AQUI';
 
@@ -23,6 +24,7 @@ const getBadgeIcon = (pontos) => {
 };
 
 export default function IA() {
+  const { tema } = useTheme();
   const [veiculo1, setVeiculo1] = useState('');
   const [veiculo2, setVeiculo2] = useState('');
   const [analise, setAnalise] = useState('');
@@ -161,24 +163,24 @@ REGRAS:
   const badge = calcularBadge(pontos);
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <StatusBar barStyle="light-content" backgroundColor="#020B24" />
+    <ScrollView style={[styles.container, { backgroundColor: tema.fundo }]} showsVerticalScrollIndicator={false}>
+      <StatusBar barStyle="light-content" backgroundColor={tema.fundo} />
 
-      <Text style={styles.headerTitle}>IA</Text>
+      <Text style={[styles.headerTitle, { color: tema.texto }]}>IA</Text>
 
-      <View style={styles.painelGamificacao}>
+      <View style={[styles.painelGamificacao, { backgroundColor: tema.card, borderColor: tema.borda }]}>
         <View style={styles.badgeIconContainer}>
           <MaterialCommunityIcons
             name={getBadgeIcon(pontos)}
             size={36}
-            color="#FFFFFF"
+            color="#1D7DFF"
           />
         </View>
 
         <View style={styles.badgeInfo}>
           <Text style={styles.badgeLabel}>Seu nível</Text>
-          <Text style={styles.badgeTitulo}>{badge.titulo}</Text>
-          <Text style={styles.proximoBadge}>
+          <Text style={[styles.badgeTitulo, { color: tema.texto }]}>{badge.titulo}</Text>
+          <Text style={[styles.proximoBadge, { color: tema.subtitulo }]}>
             {pontos < 20 && `Faltam ${20 - pontos} pts para Analista`}
             {pontos >= 20 && pontos < 50 && `Faltam ${50 - pontos} pts para Mecânico`}
             {pontos >= 50 && pontos < 100 && `Faltam ${100 - pontos} pts para Motor Expert`}
@@ -194,37 +196,37 @@ REGRAS:
       </View>
 
       <View style={styles.tituloBox}>
-        <MaterialCommunityIcons name="robot-outline" size={30} color="#2F8CFF" />
-        <Text style={styles.titulo}>Comparador IA</Text>
+        <MaterialCommunityIcons name="robot-outline" size={30} color="#1D7DFF" />
+        <Text style={[styles.titulo, { color: tema.texto }]}>Comparador IA</Text>
       </View>
 
-      <Text style={styles.subtitulo}>
+      <Text style={[styles.subtitulo, { color: tema.subtitulo }]}>
         Powered by Llama + Groq • +10 pts por comparação
       </Text>
 
-      <View style={styles.inputBox}>
-        <Ionicons name="car-sport-outline" size={20} color="#8C99B2" style={styles.inputIcon} />
+      <View style={[styles.inputBox, { backgroundColor: tema.card, borderColor: tema.borda }]}>
+        <Ionicons name="car-sport-outline" size={20} color={ tema.subtitulo } style={styles.inputIcon} />
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: tema.texto }]}
           placeholder="Veículo 1 (ex: Ford Ranger Raptor)"
-          placeholderTextColor="#8C99B2"
+          placeholderTextColor={tema.subtitulo}
           value={veiculo1}
           onChangeText={setVeiculo1}
         />
       </View>
 
       <View style={styles.vsContainer}>
-        <View style={styles.vsLine} />
+        <View style={[styles.vsLine, { backgroundColor: tema.borda }]} />
         <Text style={styles.vs}>VS</Text>
-        <View style={styles.vsLine} />
+        <View style={[styles.vsLine, { backgroundColor: tema.borda }]} />
       </View>
 
-      <View style={styles.inputBox}>
-        <Ionicons name="car-outline" size={20} color="#8C99B2" style={styles.inputIcon} />
+      <View style={[styles.inputBox, { backgroundColor: tema.card, borderColor: tema.borda }]}>
+        <Ionicons name="car-outline" size={20} color={ tema.subtitulo } style={styles.inputIcon} />
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: tema.texto }]}
           placeholder="Veículo 2 (ex: Toyota Hilux)"
-          placeholderTextColor="#8C99B2"
+          placeholderTextColor={tema.subtitulo}
           value={veiculo2}
           onChangeText={setVeiculo2}
         />
@@ -242,24 +244,24 @@ REGRAS:
       </TouchableOpacity>
 
       {analise ? (
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: tema.card, borderColor: tema.borda }]}>
           <View style={styles.cardHeader}>
-            <MaterialCommunityIcons name="brain" size={22} color="#2F8CFF" />
-            <Text style={styles.cardTitulo}>Análise da IA</Text>
+            <MaterialCommunityIcons name="brain" size={22} color="#1D7DFF" />
+            <Text style={[styles.cardTitulo, { color: tema.texto }]}>Análise da IA</Text>
           </View>
 
-          <Text style={styles.cardTexto}>{analise}</Text>
+          <Text style={[styles.cardTexto, { color: tema.texto }]}>{analise}</Text>
         </View>
       ) : null}
 
       {insight ? (
-        <View style={styles.cardInsight}>
+        <View style={[styles.cardInsight, { backgroundColor: tema.card, borderColor: tema.borda }]}>
           <View style={styles.cardHeader}>
             <Ionicons name="sparkles-outline" size={21} color="#78F34D" />
-            <Text style={styles.cardInsightTitulo}>Insight motivador</Text>
+            <Text style={[styles.cardInsightTitulo, { color: tema.texto }]}>Insight motivador</Text>
           </View>
 
-          <Text style={styles.cardInsightTexto}>{insight}</Text>
+          <Text style={[styles.cardInsightTexto, { color: tema.texto }]}>{insight}</Text>
           <Text style={styles.cardInsightPontos}>+10 pts adicionados! Total: {pontos} pts</Text>
         </View>
       ) : null}

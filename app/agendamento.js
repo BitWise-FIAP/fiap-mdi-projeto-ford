@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useTheme } from './ThemeContext';
 
 export default function Agendamento() {
   const router = useRouter();
+  const { tema } = useTheme();
   const [diaSelecionado, setDiaSelecionado] = useState('TER 20');
   const [horaSelecionada, setHoraSelecionada] = useState('09:00');
 
@@ -21,42 +23,35 @@ export default function Agendamento() {
   const horarios = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00'];
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#020B24" />
+    <View style={[styles.container, { backgroundColor: tema.fundo }]}>
+      <StatusBar barStyle="light-content" backgroundColor={tema.fundo} />
 
       <View style={styles.header}>
-        {/* <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-
-        <Text style={styles.headerTitle}>Agendar serviço</Text>
-
-        <View style={{ width: 24 }} /> */}
       </View>
 
       <Text style={styles.sectionTitle}>Serviço selecionado</Text>
 
-      <View style={styles.card}>
+      <View style={[styles.card, { backgroundColor: tema.card }]}>
         <View style={styles.iconBoxYellow}>
           <MaterialCommunityIcons name="oil" size={24} color="#FFFFFF" />
         </View>
 
         <View>
-          <Text style={styles.cardTitle}>Revisão 40.000 km</Text>
-          <Text style={styles.cardSubtitle}>Ranger Limited 2022</Text>
+          <Text style={[styles.cardTitle, { color: tema.texto }]}>Revisão 40.000 km</Text>
+          <Text style={[styles.cardSubtitle, { color: tema.subtitulo }]}>Ranger Limited 2022</Text>
         </View>
       </View>
 
       <Text style={styles.sectionTitle}>Concessionária</Text>
 
-      <View style={styles.card}>
+      <View style={[styles.card, { backgroundColor: tema.card }]}>
         <View style={styles.iconBoxDark}>
           <Ionicons name="location-outline" size={24} color="#FFFFFF" />
         </View>
 
         <View style={styles.cardInfo}>
-          <Text style={styles.cardTitle}>Ford Mix - Vila Olímpia</Text>
-          <Text style={styles.cardSubtitle}>1,2 km de você</Text>
+          <Text style={[styles.cardTitle, { color: tema.texto }]}>Ford Mix - Vila Olímpia</Text>
+          <Text style={[styles.cardSubtitle, { color: tema.subtitulo }]}>1,2 km de você</Text>
         </View>
 
         <TouchableOpacity>
@@ -66,7 +61,7 @@ export default function Agendamento() {
 
       <Text style={styles.sectionTitle}>Escolha a data</Text>
 
-      <View style={styles.daysContainer}>
+      <View style={[styles.daysContainer, { backgroundColor: tema.card }]}>
         {dias.map((item) => {
           const ativo = diaSelecionado === `${item.semana} ${item.dia}`;
 
@@ -76,10 +71,10 @@ export default function Agendamento() {
               style={[styles.dayItem, ativo && styles.dayItemActive]}
               onPress={() => setDiaSelecionado(`${item.semana} ${item.dia}`)}
             >
-              <Text style={[styles.dayWeek, ativo && styles.activeText]}>
+              <Text style={[styles.dayWeek, ativo && styles.activeText, { color: ativo ? '#FFFFFF' : tema.subtitulo }]}>
                 {item.semana}
               </Text>
-              <Text style={[styles.dayNumber, ativo && styles.activeText]}>
+              <Text style={[styles.dayNumber, ativo && styles.activeText, { color: ativo ? '#FFFFFF' : tema.texto }]}>
                 {item.dia}
               </Text>
             </TouchableOpacity>
@@ -96,10 +91,10 @@ export default function Agendamento() {
           return (
             <TouchableOpacity
               key={hora}
-              style={[styles.hourItem, ativo && styles.hourItemActive]}
+              style={[styles.hourItem, ativo && styles.hourItemActive, { backgroundColor: ativo ? '#087BFF' : tema.card, borderColor: ativo ? '#087BFF' : tema.borda }]}
               onPress={() => setHoraSelecionada(hora)}
             >
-              <Text style={[styles.hourText, ativo && styles.activeText]}>
+              <Text style={[styles.hourText, ativo && styles.activeText, { color: ativo ? '#FFFFFF' : tema.texto }]}>
                 {hora}
               </Text>
             </TouchableOpacity>

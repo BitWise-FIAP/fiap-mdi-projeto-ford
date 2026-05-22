@@ -3,10 +3,11 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator } from 'react-native';
+import { useTheme } from '../ThemeContext';
 
 export default function AuthIndex() {
   const router = useRouter();
-
+  const { tema } = useTheme();
   const [verificando, setVerificando] = useState(true);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export default function AuthIndex() {
 
   if (verificando) {
   return (
-    <View style={styles.loadingContainer}>
+    <View style={[styles.loadingContainer, { backgroundColor: tema.fundo }]}>
       <ActivityIndicator size="large" color="#087BFF" />
     </View>
   );
@@ -34,7 +35,7 @@ export default function AuthIndex() {
 
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: tema.fundo }]}>
       <StatusBar barStyle="light-content" />
 
       <View style={styles.content}>
@@ -46,10 +47,10 @@ export default function AuthIndex() {
 
         <Text style={styles.titulo}>
           <Text style={styles.tituloAzul}>VIN</Text>
-          <Text style={styles.tituloBranco}>culo</Text>
+          <Text style={[styles.tituloBranco, { color: tema.texto }]}>culo</Text>
         </Text>
 
-        <Text style={styles.subtitulo}>
+        <Text style={[styles.subtitulo, { color: tema.texto }]}>
           Sua jornada Ford{'\n'}começa aqui.
         </Text>
 
@@ -70,11 +71,11 @@ export default function AuthIndex() {
           style={styles.botaoCriar}
           onPress={() => router.push('/(auth)/cadastro')}
         >
-          <Text style={styles.botaoCriarTexto}>Criar conta</Text>
+          <Text style={[styles.botaoCriarTexto, { color: tema.texto }]}>Criar conta</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => router.replace('/(tabs)')}>
-          <Text style={styles.convidado}>Entrar como convidado</Text>
+          <Text style={[styles.convidado, { color: tema.subtitulo }]}>Entrar como convidado</Text>
         </TouchableOpacity>
       </View>
     </View>

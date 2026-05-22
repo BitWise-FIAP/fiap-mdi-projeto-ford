@@ -7,8 +7,10 @@ import {
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../ThemeContext';
 
 export default function Cadastro() {
+  const { tema } = useTheme();
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
@@ -77,21 +79,21 @@ export default function Cadastro() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: tema.fundo }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <StatusBar barStyle="light-content" backgroundColor="#020B24" />
+      <StatusBar barStyle="light-content" backgroundColor={tema.fundo} />
 
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { backgroundColor: tema.fundo }]}
         showsVerticalScrollIndicator={false}
       >
         <TouchableOpacity style={styles.voltar} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={24} color={tema.texto} />
         </TouchableOpacity>
 
-        <Text style={styles.titulo}>Criar conta</Text>
-        <Text style={styles.subtitulo}>É rápido e fácil</Text>
+        <Text style={[styles.titulo, { color: tema.texto }]}>Criar conta</Text>
+        <Text style={[styles.subtitulo, { color: tema.subtitulo }]}>É rápido e fácil</Text>
 
         <View style={styles.steps}>
           <View style={styles.stepAtivo}>
@@ -107,32 +109,32 @@ export default function Cadastro() {
           </View>
         </View>
 
-        <Text style={styles.label}>Nome completo</Text>
+        <Text style={[styles.label, { color: tema.subtitulo }]}>Nome completo</Text>
         <TextInput
           placeholder="Digite seu nome"
-          placeholderTextColor="#8C99B2"
+          placeholderTextColor={tema.subtitulo}
           value={nome}
           onChangeText={setNome}
-          style={styles.input}
+          style={[styles.input, { backgroundColor: tema.card, borderColor: tema.borda, color: tema.texto }]}
         />
         {erros.nome && <Text style={styles.erro}>{erros.nome}</Text>}
 
-        <Text style={styles.label}>E-mail</Text>
+        <Text style={[styles.label, { color: tema.subtitulo }]}>E-mail</Text>
         <TextInput
           placeholder="Digite seu e-mail"
-          placeholderTextColor="#8C99B2"
+          placeholderTextColor={tema.subtitulo}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
-          style={styles.input}
+          style={[styles.input, { backgroundColor: tema.card, borderColor: tema.borda, color: tema.texto }]}
         />
         {erros.email && <Text style={styles.erro}>{erros.email}</Text>}
 
-        <Text style={styles.label}>CPF</Text>
+        <Text style={[styles.label, { color: tema.subtitulo }]}>CPF</Text>
         <TextInput
           placeholder="000.000.000-00"
-          placeholderTextColor="#8C99B2"
+          placeholderTextColor={tema.subtitulo}
           value={cpf}
           onChangeText={(text) => {
             const cleaned = text.replace(/\D/g, '');
@@ -147,14 +149,14 @@ export default function Cadastro() {
           }}
           keyboardType="number-pad"
           maxLength={14}
-          style={styles.input}
+          style={[styles.input, { backgroundColor: tema.card, borderColor: tema.borda, color: tema.texto }]}
         />
         {erros.cpf && <Text style={styles.erro}>{erros.cpf}</Text>}
 
-        <Text style={styles.label}>Telefone</Text>
+        <Text style={[styles.label, { color: tema.subtitulo }]}>Telefone</Text>
         <TextInput
           placeholder="(11) 99999-9999"
-          placeholderTextColor="#8C99B2"
+          placeholderTextColor={tema.subtitulo}
           value={telefone}
           onChangeText={(text) => {
             const cleaned = text.replace(/\D/g, '');
@@ -168,48 +170,48 @@ export default function Cadastro() {
           }}
           keyboardType="number-pad"
           maxLength={15}
-          style={styles.input}
+          style={[styles.input, { backgroundColor: tema.card, borderColor: tema.borda, color: tema.texto }]}
         />
         
         {erros.telefone && <Text style={styles.erro}>{erros.telefone}</Text>}
 
-        <Text style={styles.label}>Senha</Text>
-        <View style={styles.senhaContainer}>
+        <Text style={[styles.label, { color: tema.subtitulo }]}>Senha</Text>
+        <View style={[styles.senhaContainer, { backgroundColor: tema.card, borderColor: tema.borda }]}>
           <TextInput
             placeholder="Mínimo de 8 caracteres"
-            placeholderTextColor="#8C99B2"
+            placeholderTextColor={tema.subtitulo}
             value={senha}
             onChangeText={setSenha}
             secureTextEntry={!senhaVisivel}
-            style={styles.inputSenha}
+            style={[styles.inputSenha, { color: tema.texto }]}
           />
 
           <TouchableOpacity onPress={() => setSenhaVisivel(!senhaVisivel)}>
             <Ionicons
               name={senhaVisivel ? 'eye-off-outline' : 'eye-outline'}
               size={20}
-              color="#8C99B2"
+              color={tema.subtitulo}
             />
           </TouchableOpacity>
         </View>
         {erros.senha && <Text style={styles.erro}>{erros.senha}</Text>}
 
-        <Text style={styles.label}>Confirmar senha</Text>
-        <View style={styles.senhaContainer}>
+        <Text style={[styles.label, { color: tema.subtitulo }]}>Confirmar senha</Text>
+        <View style={[styles.senhaContainer, { backgroundColor: tema.card, borderColor: tema.borda }]}>
           <TextInput
             placeholder="Confirme sua senha"
-            placeholderTextColor="#8C99B2"
+            placeholderTextColor={tema.subtitulo}
             value={repetirSenha}
             onChangeText={setRepetirSenha}
             secureTextEntry={!repetirSenhaVisivel}
-            style={styles.inputSenha}
+            style={[styles.inputSenha, { color: tema.texto }]}
           />
 
           <TouchableOpacity onPress={() => setRepetirSenhaVisivel(!repetirSenhaVisivel)}>
             <Ionicons
               name={repetirSenhaVisivel ? 'eye-off-outline' : 'eye-outline'}
               size={20}
-              color="#8C99B2"
+              color={tema.subtitulo}
             />
           </TouchableOpacity>
         </View>
@@ -223,7 +225,7 @@ export default function Cadastro() {
             {aceitouTermos && <Ionicons name="checkmark" size={15} color="#FFFFFF" />}
           </View>
 
-          <Text style={styles.termosTexto}>
+          <Text style={[styles.termosTexto, { color: tema.subtitulo }]}>
             Li e aceito os <Text style={styles.link}>Termos de Uso</Text> e a{'\n'}
             <Text style={styles.link}>Política de Privacidade</Text>
           </Text>

@@ -53,7 +53,7 @@ export default function Home() {
       <TouchableOpacity style={[styles.cardPontuacao, { backgroundColor: tema.card }]}  onPress={() => router.push('/recompensas')}>
               <View>
                 <Text style={styles.label}>Veja Sua Pontuação</Text>
-                <Text style={styles.pontos}>2.750 <Text style={styles.pts}>pts</Text></Text>
+                <Text style={[styles.pontos, { color: tema.texto }]}>2.750 <Text style={styles.pts}>pts</Text></Text>
               </View>
       
               <MaterialCommunityIcons name="seal-variant" size={78} color="#1D7DFF" />
@@ -83,8 +83,8 @@ export default function Home() {
 
       {/* <Text style={styles.titulo}>🏠 Home</Text> */}
      <View style={styles.buttonContainer}>
-  <TouchableOpacity style={styles.button}>
-    <Text style={styles.buttonText} onPress={() => router.push('/perfil')}>Ir para Perfil</Text>
+  <TouchableOpacity style={[styles.button, { backgroundColor: tema.card }]}>
+    <Text style={[styles.buttonText, { color: tema.texto }]} onPress={() => router.push('/perfil')}>Ir para Perfil</Text>
   </TouchableOpacity>
 </View>
       
@@ -116,14 +116,12 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#051833',
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
   },
 
   buttonText: {
-    color: '#1D7DFF',
     fontWeight: '600',
     fontSize: 16,
   },
@@ -142,8 +140,7 @@ logo: {
   resizeMode: 'contain',
 },
 
-cardPontuacao: {
-    backgroundColor: '#071B3B',
+  cardPontuacao: {
     borderRadius: 14,
     padding: 18,
     minHeight: 105,
@@ -161,7 +158,6 @@ cardPontuacao: {
   },
 
    pontos: {
-    color: '#FFFFFF',
     fontSize: 30,
     fontWeight: '900',
   },

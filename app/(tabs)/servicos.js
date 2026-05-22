@@ -3,30 +3,32 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import CardServico from '../../components/CardServicos'
+import { useTheme } from '../ThemeContext';
 
 export default function Servicos() {
   const router = useRouter();
+  const { tema } = useTheme();
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#020B24" />
+    <View style={[styles.container, { backgroundColor: tema.fundo }]}>
+      <StatusBar barStyle="light-content" backgroundColor={tema.fundo} />
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+            <Ionicons name="arrow-back" size={24} color={tema.texto} />
           </TouchableOpacity>
 
-          <Text style={styles.headerTitle}>Recomendações</Text>
+          <Text style={[styles.headerTitle, { color: tema.texto }]}>Recomendações</Text>
 
           <View style={{ width: 24 }} />
         </View>
 
-        <View style={styles.cardDestaque}>
+        <View style={[styles.cardDestaque, { backgroundColor: tema.card }]}>
           <View style={styles.cardTexto}>
             <Text style={styles.label}>Recomendação para você</Text>
-            <Text style={styles.tituloCard}>Troca de óleo</Text>
-            <Text style={styles.descricao}>
+            <Text style={[styles.tituloCard, { color: tema.texto }]}>Troca de óleo</Text>
+            <Text style={[styles.descricao, { color: tema.subtitulo }]}>
               Com base no uso do seu veículo, recomendamos a troca de óleo em breve.
             </Text>
 
@@ -35,7 +37,7 @@ export default function Servicos() {
             </TouchableOpacity>
           </View>
 
-          <MaterialCommunityIcons name="car-wrench" size={88} color="#AFCBFF" />
+          <MaterialCommunityIcons name="car-wrench" size={88} color={tema.subtitulo} />
         </View>
 
         <Text style={styles.sectionTitle}>Outras recomendações</Text>

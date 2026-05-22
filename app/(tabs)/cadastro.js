@@ -104,8 +104,8 @@ export default function Cadastro() {
         onChangeText={setData}
       />
 
-      <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
-        <Text style={styles.imageButtonText}>Escolher imagem do iPhone</Text>
+      <TouchableOpacity style={[styles.imageButton, { borderColor: '#1D7DFF' }]} onPress={pickImage}>
+        <Text style={[styles.imageButtonText, { color: '#1D7DFF' }]}>Escolher imagem do iPhone</Text>
       </TouchableOpacity>
 
       {imagem ? (
@@ -120,12 +120,12 @@ export default function Cadastro() {
         onChangeText={setImagem}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+      <TouchableOpacity style={[styles.button, { backgroundColor: '#1D7DFF' }]} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => router.back()}>
-        <Text style={styles.voltar}>← Voltar</Text>
+        <Text style={[styles.voltar, { color: '#1D7DFF' }]}>← Voltar</Text>
       </TouchableOpacity>
     </ScrollView>
   );

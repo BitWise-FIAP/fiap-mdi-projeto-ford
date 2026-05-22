@@ -47,9 +47,9 @@ export default function Historico() {
         </Text>
       </View>
 
-      <View style={styles.highlightCard}>
-        <View style={styles.highlightIcon}>
-          <Ionicons name="time-outline" size={24} color="#E83D84" />
+      <View style={[styles.highlightCard, { backgroundColor: tema.card, borderColor: tema.borda }]}>
+        <View style={[styles.highlightIcon, { backgroundColor: tema.card }]}>
+          <Ionicons name="time-outline" size={24} color="#1D7DFF" />
         </View>
 
         <View style={styles.highlightTextArea}>
@@ -67,7 +67,7 @@ export default function Historico() {
           <View style={styles.cardTop}>
             <View style={styles.itemLeft}>
               <View style={styles.iconBox}>
-                <Ionicons name="cube-outline" size={20} color="#E83D84" />
+                <Ionicons name="cube-outline" size={20} color="#1D7DFF" />
               </View>
 
               <View>
@@ -80,7 +80,7 @@ export default function Historico() {
 
           <View style={styles.cardBottom}>
             <View style={styles.infoRow}>
-              <Ionicons name="calendar-outline" size={15} color="#E83D84" />
+              <Ionicons name="calendar-outline" size={15} color="#1D7DFF" />
               <Text style={styles.infoText}>{solicitacao.data}</Text>
             </View>
 
@@ -98,8 +98,8 @@ export default function Historico() {
         </TouchableOpacity>
       ))}
 
-      <View style={styles.tipCard}>
-        <Ionicons name="information-circle-outline" size={20} color="#E83D84" />
+      <View style={[styles.tipCard, { backgroundColor: tema.card, borderColor: tema.borda }]}>
+        <Ionicons name="information-circle-outline" size={20} color="#1D7DFF" />
         <Text style={styles.tipText}>
           Você será avisado quando houver atualização no status de uma solicitação.
         </Text>
@@ -132,14 +132,12 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   highlightCard: {
-    backgroundColor: '#FFF1F8',
     borderRadius: 18,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: '#FFD3E8',
   },
   highlightIcon: {
     width: 46,
@@ -192,7 +190,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 14,
-    backgroundColor: '#FFF0F7',
+    backgroundColor: '#d9e6f8',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,

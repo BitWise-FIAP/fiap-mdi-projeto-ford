@@ -12,19 +12,19 @@ export default function Suporte() {
     >
       <View style={styles.header}>
         <Text style={[styles.title, {color: tema.texto}]}>Suporte</Text>
-        <Text style={styles.subtitle}>
+        <Text style={[styles.subtitle, { color: tema.subtitulo }]}>
           Precisa de ajuda? Fale com a equipe responsável ou consulte as dúvidas mais comuns.
         </Text>
       </View>
 
-      <View style={styles.highlightCard}>
-        <View style={styles.highlightIcon}>
-          <Ionicons name="headset-outline" size={26} color="#EC0E7A" />
+      <View style={[styles.highlightCard, { backgroundColor: tema.card, borderColor: tema.borda }]}>
+        <View style={[styles.highlightIcon, { backgroundColor: tema.card }]}>
+          <Ionicons name="headset-outline" size={26} color="#1D7DFF" />
         </View>
 
         <View style={styles.highlightTextArea}>
-          <Text style={styles.highlightTitle}>Atendimento rápido</Text>
-          <Text style={styles.highlightText}>
+          <Text style={[styles.highlightTitle, { color: tema.texto }]}>Atendimento rápido</Text>
+          <Text style={[styles.highlightText, { color: tema.subtitulo }]}>
             Nossa equipe pode te ajudar com itens perdidos, encontrados e orientações gerais.
           </Text>
         </View>
@@ -34,8 +34,8 @@ export default function Suporte() {
 
       <TouchableOpacity style={[styles.optionCard, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.8}>
         <View style={styles.leftArea}>
-          <View style={styles.iconCircle}>
-            <Ionicons name="logo-whatsapp" size={22} color="#EC0E7A" />
+          <View style={[styles.iconCircle, { backgroundColor: tema.card }]}>
+            <Ionicons name="logo-whatsapp" size={22} color="#1D7DFF" />
           </View>
 
           <View>
@@ -49,8 +49,8 @@ export default function Suporte() {
 
       <TouchableOpacity style={[styles.optionCard, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.8}>
         <View style={styles.leftArea}>
-          <View style={styles.iconCircle}>
-            <Ionicons name="mail-outline" size={22} color="#EC0E7A" />
+          <View style={[styles.iconCircle, { backgroundColor: tema.card }]}>
+            <Ionicons name="mail-outline" size={22} color="#1D7DFF" />
           </View>
 
           <View>
@@ -64,8 +64,8 @@ export default function Suporte() {
 
       <TouchableOpacity style={[styles.optionCard, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.8}>
         <View style={styles.leftArea}>
-          <View style={styles.iconCircle}>
-            <Ionicons name="help-buoy-outline" size={22} color="#EC0E7A" />
+          <View style={[styles.iconCircle, { backgroundColor: tema.card }]}>
+            <Ionicons name="help-buoy-outline" size={22} color="#1D7DFF" />
           </View>
 
           <View>
@@ -93,7 +93,7 @@ export default function Suporte() {
         </Text>
       </View>
 
-      <TouchableOpacity style={styles.primaryButton} activeOpacity={0.85}>
+      <TouchableOpacity style={[styles.primaryButton, { backgroundColor: '#1D7DFF' }]} activeOpacity={0.85}>
         <Text style={styles.primaryButtonText}>Entrar em contato</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -124,14 +124,12 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   highlightCard: {
-    backgroundColor: '#FFF1F8',
     borderRadius: 18,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: '#FFD3E8',
   },
   highlightIcon: {
     width: 48,
@@ -183,7 +181,6 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#FFF1F8',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -218,7 +215,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   primaryButton: {
-    backgroundColor: '#EC0E7A',
     height: 54,
     borderRadius: 16,
     alignItems: 'center',

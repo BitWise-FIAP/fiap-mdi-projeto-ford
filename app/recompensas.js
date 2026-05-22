@@ -1,40 +1,42 @@
 import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTheme } from './ThemeContext';
 
 export default function Recompensas() {
+  const { tema } = useTheme();
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#020B24" />
+    <View style={[styles.container, { backgroundColor: tema.fundo }]}>
+      <StatusBar barStyle="light-content" backgroundColor={tema.fundo} />
 
-      <Text style={styles.titulo}>Recompensas</Text>
+      <Text style={[styles.titulo, { color: tema.texto }]}>Recompensas</Text>
 
-      <View style={styles.card}>
+      <View style={[styles.card, { backgroundColor: tema.card }]}>
         <View>
           <Text style={styles.label}>Seu nível</Text>
-          <Text style={styles.nivel}>Prata</Text>
-          <Text style={styles.descricao}>1.250 pts para o próximo nível</Text>
+          <Text style={[styles.nivel, { color: tema.texto }]}>Prata</Text>
+          <Text style={[styles.descricao, { color: tema.subtitulo }]}>1.250 pts para o próximo nível</Text>
 
           <View style={styles.progressBg}>
             <View style={styles.progressFill} />
           </View>
         </View>
 
-        <MaterialCommunityIcons name="medal-outline" size={82} color="#C4CBD8" />
+        <MaterialCommunityIcons name="medal-outline" size={82} color={tema.subtitulo} />
       </View>
 
-      <View style={styles.cardMenor}>
+      <View style={[styles.cardMenor, { backgroundColor: tema.card }]}>
         <View>
           <Text style={styles.label}>Seus pontos</Text>
-          <Text style={styles.pontos}>2.750 <Text style={styles.pts}>pts</Text></Text>
+          <Text style={[styles.pontos, { color: tema.texto }]}>2.750 <Text style={styles.pts}>pts</Text></Text>
         </View>
 
         <MaterialCommunityIcons name="seal-variant" size={78} color="#1D7DFF" />
       </View>
 
-      <View style={styles.cardMenor}>
+      <View style={[styles.cardMenor, { backgroundColor: tema.card }]}>
         <View>
           <Text style={styles.label}>Resgate seus pontos</Text>
-          <Text style={styles.descricao}>Troque por benefícios exclusivos!</Text>
+          <Text style={[styles.descricao, { color: tema.subtitulo }]}>Troque por benefícios exclusivos!</Text>
         </View>
 
         <Ionicons name="gift" size={70} color="#1D7DFF" />
