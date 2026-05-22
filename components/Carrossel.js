@@ -12,6 +12,12 @@ const carrosTemplate = [
     nome: 'Ford Ranger Raptor',
     ano: '2022',
     cor: 'Azul',
+    placa: 'ABC1D23',
+    km: '32.450 km',
+    proximaRevisao: '5.000 km',
+    garantiaStatus: 'Ativa',
+    garantiaValidade: 'até 12/07/2026',
+    planoManutencao: 'Premium Care',
     imagem: require('../assets/ranger-azul.png'),
   },
   {
@@ -19,6 +25,12 @@ const carrosTemplate = [
     nome: 'Ford Ranger Limited',
     ano: '2023',
     cor: 'Vermelha',
+    placa: 'XYZ4E56',
+    km: '18.200 km',
+    proximaRevisao: '8.000 km',
+    garantiaStatus: 'Ativa',
+    garantiaValidade: 'até 03/11/2027',
+    planoManutencao: 'Premium Care',
     imagem: require('../assets/ranger-vermelha.png'),
   },
 ];
@@ -83,6 +95,12 @@ export default function Carrossel() {
       nome: carro.nome,
       ano: carro.ano,
       cor: carro.cor,
+      placa: carro.placa || '—',
+      km: carro.km || '—',
+      proximaRevisao: carro.proximaRevisao || '—',
+      garantiaStatus: carro.garantiaStatus || '—',
+      garantiaValidade: carro.garantiaValidade || '—',
+      planoManutencao: carro.planoManutencao || '—',
       imagem: typeof carro.imagem === 'number' ? 'template' : carro.imagem,
     };
     router.push({ pathname: '/carro', params: dados });

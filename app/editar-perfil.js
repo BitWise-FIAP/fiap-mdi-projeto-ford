@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from './ThemeContext';
@@ -8,6 +9,16 @@ import { useTheme } from './ThemeContext';
 export default function EditarPerfil() {
   const { tema } = useTheme();
   const router = useRouter();
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Editar Perfil',
+      headerStyle: { backgroundColor: tema.fundo },
+      headerTintColor: tema.texto,
+      headerShadowVisible: false,
+    });
+  }, [navigation, tema]);
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');

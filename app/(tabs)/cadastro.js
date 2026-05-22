@@ -10,6 +10,7 @@ export default function Cadastro() {
   const [nome, setNome] = useState('');
   const [ano, setAno] = useState('');
   const [cor, setCor] = useState('');
+  const [placa, setPlaca] = useState('');
   const [imagem, setImagem] = useState('');
   const { tema } = useTheme();
 
@@ -43,6 +44,7 @@ export default function Cadastro() {
       nome,
       ano,
       cor,
+      placa: placa.toUpperCase(),
       imagem: imagem || 'https://via.placeholder.com/300',
     };
 
@@ -56,6 +58,7 @@ export default function Cadastro() {
       setNome('');
       setAno('');
       setCor('');
+      setPlaca('');
       setImagem('');
       router.back();
     } catch (error) {
@@ -91,6 +94,15 @@ export default function Cadastro() {
         placeholderTextColor={tema.subtitulo}
         value={cor}
         onChangeText={setCor}
+      />
+
+      <TextInput
+        style={[styles.input, { backgroundColor: tema.card, borderColor: tema.borda, color: tema.texto }]}
+        placeholder="Placa (ex: ABC1D23)"
+        placeholderTextColor={tema.subtitulo}
+        value={placa}
+        onChangeText={setPlaca}
+        autoCapitalize="characters"
       />
 
       <TouchableOpacity style={[styles.imageButton, { borderColor: '#1D7DFF' }]} onPress={pickImage}>
