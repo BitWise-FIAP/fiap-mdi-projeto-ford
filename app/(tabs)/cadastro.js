@@ -8,9 +8,8 @@ import { useTheme } from '../ThemeContext';
 export default function Cadastro() {
   const router = useRouter();
   const [nome, setNome] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [local, setLocal] = useState('');
-  const [data, setData] = useState('');
+  const [ano, setAno] = useState('');
+  const [cor, setCor] = useState('');
   const [imagem, setImagem] = useState('');
   const { tema } = useTheme();
 
@@ -34,78 +33,68 @@ export default function Cadastro() {
   };
 
   const handleSubmit = async () => {
-    if (!nome || !descricao || !local || !data) {
+    if (!nome || !ano || !cor) {
       Alert.alert('Erro', 'Preencha todos os campos obrigatórios.');
       return;
     }
 
-    const newItem = {
-      id: Date.now(),
+    const novoCarro = {
+      id: Date.now().toString(),
       nome,
-      descricao,
-      local_perdido: local,
-      data,
+      ano,
+      cor,
       imagem: imagem || 'https://via.placeholder.com/300',
     };
 
     try {
-      const storedItens = await AsyncStorage.getItem('itens');
-      const itens = storedItens ? JSON.parse(storedItens) : [];
-      itens.push(newItem);
-      await AsyncStorage.setItem('itens', JSON.stringify(itens));
-      Alert.alert('Sucesso', 'Item cadastrado com sucesso!');
-      
+      const stored = await AsyncStorage.getItem('carros');
+      const carros = stored ? JSON.parse(stored) : [];
+      carros.push(novoCarro);
+      await AsyncStorage.setItem('carros', JSON.stringify(carros));
+      Alert.alert('Sucesso', 'Carro cadastrado com sucesso!');
+
       setNome('');
-      setDescricao('');
-      setLocal('');
-      setData('');
+      setAno('');
+      setCor('');
       setImagem('');
       router.back();
     } catch (error) {
-      Alert.alert('Erro', 'Falha ao salvar o item.');
+      Alert.alert('Erro', 'Falha ao salvar o carro.');
       console.error(error);
     }
   };
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: tema.fundo }]}>
-      <Text style={[styles.titulo, {color: tema.texto}]}>Cadastrar Item</Text>
+      <Text style={[styles.titulo, {color: tema.texto}]}>Adicionar Carro</Text>
 
       <TextInput
-        style={[styles.input, { backgroundColor: tema.card }, {borderColor: tema.borda}]}
-        placeholder="Nome do item"
-        placeholderTextColor={tema.texto}
+        style={[styles.input, { backgroundColor: tema.card, borderColor: tema.borda, color: tema.texto }]}
+        placeholder="Modelo do carro"
+        placeholderTextColor={tema.subtitulo}
         value={nome}
         onChangeText={setNome}
       />
 
       <TextInput
-        style={[styles.input, { backgroundColor: tema.card }, {borderColor: tema.borda}]}
-        placeholder="Descrição"
-        placeholderTextColor={tema.texto}
-        value={descricao}
-        onChangeText={setDescricao}
-        multiline
+        style={[styles.input, { backgroundColor: tema.card, borderColor: tema.borda, color: tema.texto }]}
+        placeholder="Ano (ex: 2022)"
+        placeholderTextColor={tema.subtitulo}
+        value={ano}
+        onChangeText={setAno}
+        keyboardType="number-pad"
       />
 
       <TextInput
-        style={[styles.input, { backgroundColor: tema.card }, {borderColor: tema.borda}]}
-        placeholder="Local perdido"
-        placeholderTextColor={tema.texto}
-        value={local}
-        onChangeText={setLocal}
-      />
-
-      <TextInput
-        style={[styles.input, { backgroundColor: tema.card }, {borderColor: tema.borda}]}
-        placeholder="Data (YYYY-MM-DD)"
-        placeholderTextColor={tema.texto}
-        value={data}
-        onChangeText={setData}
+        style={[styles.input, { backgroundColor: tema.card, borderColor: tema.borda, color: tema.texto }]}
+        placeholder="Cor"
+        placeholderTextColor={tema.subtitulo}
+        value={cor}
+        onChangeText={setCor}
       />
 
       <TouchableOpacity style={[styles.imageButton, { borderColor: '#1D7DFF' }]} onPress={pickImage}>
-        <Text style={[styles.imageButtonText, { color: '#1D7DFF' }]}>Escolher imagem do iPhone</Text>
+        <Text style={[styles.imageButtonText, { color: '#1D7DFF' }]}>Escolher foto do carro</Text>
       </TouchableOpacity>
 
       {imagem ? (
@@ -113,15 +102,15 @@ export default function Cadastro() {
       ) : null}
 
       <TextInput
-        style={[styles.input, , { backgroundColor: tema.card }, {borderColor: tema.borda}]}
+        style={[styles.input, { backgroundColor: tema.card, borderColor: tema.borda, color: tema.texto }]}
         placeholder="URL da imagem (opcional)"
-        placeholderTextColor={tema.texto}
+        placeholderTextColor={tema.subtitulo}
         value={imagem}
         onChangeText={setImagem}
       />
 
       <TouchableOpacity style={[styles.button, { backgroundColor: '#1D7DFF' }]} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Cadastrar</Text>
+        <Text style={styles.buttonText}>Cadastrar Carro</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => router.back()}>
@@ -145,15 +134,12 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#EFEFF2',
-    backgroundColor: "#FFFFFF", 
     padding: 12,
     marginBottom: 12,
     borderRadius: 8,
     fontSize: 16,
   },
   button: {
-    backgroundColor: '#EC0E7A',
     padding: 16,
     borderRadius: 12,
     alignItems: 'center',
@@ -167,14 +153,12 @@ const styles = StyleSheet.create({
   imageButton: {
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#E83D84',
     padding: 14,
     borderRadius: 12,
     alignItems: 'center',
     marginBottom: 16,
   },
   imageButtonText: {
-    color: '#E83D84',
     fontWeight: '600',
     fontSize: 15,
   },
@@ -187,7 +171,6 @@ const styles = StyleSheet.create({
   },
   voltar: {
     fontSize: 16,
-    color: '#E83D84',
     fontWeight: '600',
     textAlign: 'center',
   },

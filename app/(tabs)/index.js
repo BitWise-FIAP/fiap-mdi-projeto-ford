@@ -62,15 +62,15 @@ export default function Home() {
       <View style={styles.section}> 
        <View style={styles.actions}>
         <CardHome
-          icon="cube-outline"
-          title="Cadastrar item encontrado"
+          icon="car-outline"
+          title="Adicionar Carro"
           onPress={() => router.push('/cadastro')}
         />
 
         <CardHome
           icon="eye-outline"
-          title="Ver todos os itens"
-          onPress={() => router.push('/itens')}
+          title="Ver todos os carros"
+          onPress={() => router.push('/(tabs)')}
         />
 
         <CardHome

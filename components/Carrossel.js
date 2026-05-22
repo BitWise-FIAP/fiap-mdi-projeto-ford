@@ -1,71 +1,96 @@
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../app/ThemeContext';
 
-const itensRecentes = [
+const carrosTemplate = [
   {
-    id: '1',
-    nome: 'Chaves',
-    local: 'Recepção',
-    data: '08/04/2026',
+    id: 'template-1',
+    nome: 'Ford Ranger Raptor',
+    ano: '2022',
+    cor: 'Azul',
     imagem: require('../assets/ranger-azul.png'),
   },
   {
-    id: '2',
-    nome: 'Carteira',
-    local: 'Biblioteca',
-    data: '07/04/2026',
+    id: 'template-2',
+    nome: 'Ford Ranger Limited',
+    ano: '2023',
+    cor: 'Vermelha',
     imagem: require('../assets/ranger-vermelha.png'),
-  }
+  },
 ];
 
-function ItemCard({ item, onPress }) {
+function CarCard({ item, onPress }) {
   const { tema } = useTheme();
+  const imagemSource = typeof item.imagem === 'string' && item.imagem.startsWith('file://')
+    ? { uri: item.imagem }
+    : item.imagem;
   return (
     <TouchableOpacity style={[styles.card, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.85} onPress={onPress}>
-      <Image source={item.imagem} style={styles.image} />
+      <Image source={imagemSource} style={styles.image} />
 
       <View style={styles.info}>
-        <Text style={[styles.nome, { color: tema.texto }]} numberOfLines={1}>
+        <Text style={[styles.nome, { color: tema.texto }]} numberOfLines={2}>
           {item.nome}
         </Text>
 
         <View style={styles.row}>
-          <Ionicons name="location-outline" size={13} color="#1D7DFF" />
-          <Text style={styles.meta} numberOfLines={1}>
-            {item.local}
-          </Text>
+          <Ionicons name="calendar-outline" size={13} color="#1D7DFF" />
+          <Text style={[styles.meta, { color: tema.subtitulo }]}>{item.ano}</Text>
         </View>
 
         <View style={styles.row}>
-          <Ionicons name="time-outline" size={13} color="#1D7DFF" />
-          <Text style={styles.meta}>{item.data}</Text>
+          <Ionicons name="color-palette-outline" size={13} color="#1D7DFF" />
+          <Text style={[styles.meta, { color: tema.subtitulo }]}>{item.cor}</Text>
         </View>
       </View>
 
-      <Ionicons name="chevron-forward-outline" size={18} color="#888" />
+      <Ionicons name="chevron-forward-outline" size={18} color={tema.subtitulo} />
     </TouchableOpacity>
   );
 }
 
-export default function RecentItemsCarousel() {
+export default function Carrossel() {
   const { tema } = useTheme();
+  const [carros, setCarros] = useState(carrosTemplate);
+
+  useEffect(() => {
+    const carregarCarros = async () => {
+      try {
+        const stored = await AsyncStorage.getItem('carros');
+        if (stored) {
+          const carrosUsuario = JSON.parse(stored);
+          setCarros([...carrosTemplate, ...carrosUsuario]);
+        }
+      } catch (error) {
+        console.log('Erro ao carregar carros:', error);
+      }
+    };
+    carregarCarros();
+  }, []);
+
   return (
     <View style={[styles.container, {backgroundColor: tema.card}]}>
-      <Text style={[styles.title]}>Meus Carros Ford</Text>
+      <Text style={[styles.title, { color: '#2F8CFF' }]}>Meus Carros Ford</Text>
 
       <FlatList
-        data={itensRecentes}
+        data={carros}
         keyExtractor={(item) => item.id}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
-          <ItemCard
+          <CarCard
             item={item}
-            onPress={() => console.log('Abrir item:', item.nome)}
+            onPress={() => console.log('Abrir carro:', item.nome)}
           />
         )}
+        ListEmptyComponent={
+          <Text style={[styles.empty, { color: tema.subtitulo }]}>
+            Nenhum carro cadastrado ainda
+          </Text>
+        }
       />
     </View>
   );
@@ -75,14 +100,13 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 14,
     padding: 16,
-    width: '100%', 
+    width: '100%',
     marginTop: 20,
     marginBottom: 20,
   },
   title: {
     fontSize: 18,
     fontWeight: '900',
-    color: '#2F8CFF',
     marginBottom: 20,
   },
   listContent: {
@@ -90,14 +114,12 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 325,
-    backgroundColor: '#FFFFFF',
     borderRadius: 35,
     padding: 15,
     marginRight: 12,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#EFEFF2',
   },
   image: {
     width: 136,
@@ -113,17 +135,20 @@ const styles = StyleSheet.create({
   nome: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#2B2B2B',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 2,
+    marginTop: 3,
   },
   meta: {
     fontSize: 12,
-    color: '#7A7A7A',
     marginLeft: 4,
+  },
+  empty: {
+    fontSize: 14,
+    textAlign: 'center',
+    paddingVertical: 20,
   },
 });

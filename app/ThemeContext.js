@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  const [modoEscuro, setModoEscuro] = useState(false);
+  const [modoEscuro, setModoEscuro] = useState(true);
 
   useEffect(() => {
     const carregarTema = async () => {
