@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../app/ThemeContext';
@@ -53,22 +55,38 @@ function CarCard({ item, onPress }) {
 
 export default function Carrossel() {
   const { tema } = useTheme();
+  const router = useRouter();
   const [carros, setCarros] = useState(carrosTemplate);
 
-  useEffect(() => {
-    const carregarCarros = async () => {
-      try {
-        const stored = await AsyncStorage.getItem('carros');
-        if (stored) {
-          const carrosUsuario = JSON.parse(stored);
-          setCarros([...carrosTemplate, ...carrosUsuario]);
+  useFocusEffect(
+    useCallback(() => {
+      const carregarCarros = async () => {
+        try {
+          const stored = await AsyncStorage.getItem('carros');
+          if (stored) {
+            const carrosUsuario = JSON.parse(stored);
+            setCarros([...carrosTemplate, ...carrosUsuario]);
+          } else {
+            setCarros(carrosTemplate);
+          }
+        } catch (error) {
+          console.log('Erro ao carregar carros:', error);
         }
-      } catch (error) {
-        console.log('Erro ao carregar carros:', error);
-      }
+      };
+      carregarCarros();
+    }, [])
+  );
+
+  const abrirCarro = (carro) => {
+    const dados = {
+      id: carro.id,
+      nome: carro.nome,
+      ano: carro.ano,
+      cor: carro.cor,
+      imagem: typeof carro.imagem === 'number' ? 'template' : carro.imagem,
     };
-    carregarCarros();
-  }, []);
+    router.push({ pathname: '/carro', params: dados });
+  };
 
   return (
     <View style={[styles.container, {backgroundColor: tema.card}]}>
@@ -83,7 +101,7 @@ export default function Carrossel() {
         renderItem={({ item }) => (
           <CarCard
             item={item}
-            onPress={() => console.log('Abrir carro:', item.nome)}
+            onPress={() => abrirCarro(item)}
           />
         )}
         ListEmptyComponent={

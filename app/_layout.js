@@ -87,6 +87,22 @@
           }}
         />
         
+        <Stack.Screen
+          name="carro"
+          options={{
+            title: 'Detalhes do carro',
+            headerShown: true,
+          }}
+        />
+
+        <Stack.Screen
+          name="editar-perfil"
+          options={{
+            title: 'Editar Perfil',
+            headerShown: true,
+          }}
+        />
+
         <Stack.Screen name="(auth)/index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/cadastro" options={{ headerShown: false }} />

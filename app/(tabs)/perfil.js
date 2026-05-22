@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -17,24 +18,26 @@ export default function Perfil() {
     return initials || 'VF';
   };
 
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const token = await AsyncStorage.getItem('userToken');
-        if (token) {
-          const usersStr = await AsyncStorage.getItem('users');
-          if (usersStr) {
-            const users = JSON.parse(usersStr);
-            const foundUser = users.find(u => u.id === token);
-            setUser(foundUser);
+  useFocusEffect(
+    useCallback(() => {
+      const loadUser = async () => {
+        try {
+          const token = await AsyncStorage.getItem('userToken');
+          if (token) {
+            const usersStr = await AsyncStorage.getItem('users');
+            if (usersStr) {
+              const users = JSON.parse(usersStr);
+              const foundUser = users.find(u => u.id === token);
+              setUser(foundUser);
+            }
           }
+        } catch (error) {
+          console.log('Erro ao carregar usuário:', error);
         }
-      } catch (error) {
-        console.log('Erro ao carregar usuário:', error);
-      }
-    };
-    loadUser();
-  }, []);
+      };
+      loadUser();
+    }, [])
+  );
 
   const handleLogout = () => {
     Alert.alert(
@@ -73,7 +76,7 @@ export default function Perfil() {
         <Text style={[styles.nome, { color: tema.texto }]}>{user?.nome || 'Nome'}</Text>
         <Text style={styles.email}>{user?.email || 'email@exemplo.com'}</Text>
 
-        <TouchableOpacity style={styles.editButton} activeOpacity={0.85}>
+        <TouchableOpacity style={styles.editButton} activeOpacity={0.85} onPress={() => router.push('/editar-perfil')}>
           <Ionicons name="create-outline" size={16} color="#FFFFFF" />
           <Text style={styles.editButtonText}>Editar perfil</Text>
         </TouchableOpacity>
@@ -149,9 +152,9 @@ export default function Perfil() {
         <Ionicons name="chevron-forward" size={20} color="#1D7DFF" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.logoutButton, { backgroundColor: tema.card, borderColor: tema.borda }]} activeOpacity={0.85} onPress={handleLogout}>
-        <Ionicons name="log-out-outline" size={18} color={tema.texto} />
-        <Text style={[styles.logoutText, { color: tema.texto }]}>Sair da conta</Text>
+      <TouchableOpacity style={[styles.logoutButton, { backgroundColor: tema.card, borderColor: '#b91c1c' }]} activeOpacity={0.85} onPress={handleLogout}>
+        <Ionicons name="log-out-outline" size={18} color="#b91c1c" />
+        <Text style={[styles.logoutText, { color: '#b91c1c' }]}>Sair da conta</Text>
       </TouchableOpacity>
     </ScrollView>
   );
