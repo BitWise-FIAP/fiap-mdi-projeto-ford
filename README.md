@@ -151,7 +151,7 @@ Depois disso:
 ---
 
 ### Tela de Cadastro Carro
-![Cadastro Carro](./screens/cadatrocarro.png)
+![Cadastro Carro](./screens/cadastrocarro.png)
 
 ---
 
