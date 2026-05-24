@@ -167,9 +167,9 @@ Adicione aqui o GIF ou vídeo demonstrando o fluxo principal do aplicativo.
 
 Exemplo:
 
-```md
+
 ![Demonstração](./screens/gif-challenge.gif)
-```
+
 
 # 🛠️ Decisões Técnicas
 
