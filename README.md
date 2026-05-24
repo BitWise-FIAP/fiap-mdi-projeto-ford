@@ -163,11 +163,6 @@ Depois disso:
 
 ## 🎥 Demonstração em Vídeo/GIF
 
-Adicione aqui o GIF ou vídeo demonstrando o fluxo principal do aplicativo.
-
-Exemplo:
-
-
 ![Demonstração](./screens/gif-challenge.gif)
 
 
