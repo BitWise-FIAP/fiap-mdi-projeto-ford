@@ -1,142 +1,246 @@
-# 📱 Achados e Perdidos - Faculdade
+# 🚗 Ford Client Manager App
 
-Aplicativo mobile desenvolvido em React Native com o objetivo de facilitar o registro e a busca de itens perdidos dentro do ambiente acadêmico.  
+## 📌 Sobre o Projeto
 
-Enrico Ricarte Rodrigues - RM558571  
-Pedro Gaspar Fernandes Ferrari – RM554887  
-Victor Freire Martins Siqueira – RM556191  
+O **Ford Client Manager App** é um aplicativo mobile desenvolvido com foco no gerenciamento e experiência do cliente da Ford. O projeto foi criado como solução para o desafio proposto pela Ford, com o objetivo de centralizar funcionalidades importantes em um único aplicativo moderno, intuitivo e acessível.
 
----
+O desafio escolhido pelo grupo teve como foco melhorar a experiência do cliente através de tecnologia mobile, trazendo praticidade no gerenciamento de informações, agendamentos e suporte inteligente.
 
-## 🚀 Sobre o Projeto
+### 🎯 Objetivo do Desafio
 
-O **Achados e Perdidos** é um app que conecta pessoas que perderam objetos com aquelas que os encontraram dentro da faculdade.
+Desenvolver uma solução mobile capaz de melhorar a interação do cliente com a Ford, oferecendo uma experiência mais moderna, organizada e eficiente.
 
-A proposta é simples:
-- Encontrou algo? Cadastre no app.
-- Perdeu algo? Procure na lista de itens.
+### ❓ Por que escolhemos esse desafio?
+
+O grupo escolheu este desafio por acreditar que a experiência do usuário é um dos pontos mais importantes atualmente para empresas do setor automotivo. A proposta permitiu unir desenvolvimento mobile, interface moderna e integração com inteligência artificial, além de trabalhar conceitos importantes de UX/UI e arquitetura de software.
 
 ---
 
-## 🧩 Funcionalidades
+# ⚙️ Funcionalidades Implementadas
 
-- 🏠 **Home**
-  - Tela inicial com navegação principal do app
+✅ Tela de Boas-Vindas
 
-- 📦 **Itens**
-  - Visualização de itens perdidos/encontrados
-  - Lista com informações dos objetos
+✅ Sistema de Login
 
-- 👤 **Perfil**
-  - Informações do usuário
+✅ Sistema de Cadastro
 
-- 📝 **Cadastro**
-  - Registro de novos itens perdidos no sistema
+✅ Navegação entre telas
 
----
+✅ Home principal do aplicativo
 
-## 🔐 Novas Funcionalidades
+✅ Cards informativos
 
-Nesta versão, o app foi aprimorado com autenticação, persistência de dados e melhorias de usabilidade.
+✅ Tela de Perfil do usuário
 
-### 👥 Autenticação
-- Cadastro com:
-  - Nome, e-mail válido, senha (mín. 6 caracteres) e confirmação  
-- Login com validação de credenciais  
-- Sessão persistida (usuário continua logado ao reabrir o app)  
-- Logout com limpeza de sessão  
-- Redirecionamento automático após login  
+✅ Sistema de agendamento
 
-### 💾 Persistência de Dados
-- Uso de **AsyncStorage** para armazenar:
-  - Dados do usuário  
-  - Itens cadastrados  
-- Dados permanecem mesmo após fechar o app  
-- Atualização automática ao adicionar, editar ou remover dados  
+✅ Fluxo de telas organizado
 
-### 🌐 Estado Global (Context API)
-- Gerenciamento centralizado com:
-  - **AuthContext** (login, logout, usuário)  
-  - Contexto de dados do app  
-- Proteção de rotas (usuário não autenticado não acessa o sistema)  
+✅ Interface responsiva e moderna
 
-### ✅ Validação de Formulários
-- Validação em todos os formulários:
-  - Campos obrigatórios  
-  - E-mail válido  
-  - Senha mínima de 6 caracteres  
-  - Confirmação de senha  
-- Mensagens de erro exibidas abaixo dos campos  
-- Botão desabilitado em caso de erro  
+✅ Integração com Inteligência Artificial
 
-### 🎨 UI/UX
-- Melhorias visuais em todas as telas  
-- Navegação mais fluida  
-- Interface mais intuitiva  
+✅ Assistente IA para análise/comparação de veículos
+
+✅ Organização de imagens/screenshots para documentação
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+# 👨‍💻 Integrantes do Grupo
 
-- React Native  
-- Expo  
-- JavaScript  
-- Expo Router  
-- AsyncStorage  
-- Context API  
-
----
-
-## 📱 Como executar o projeto
-
-### Pré-requisitos:
-- Node.js instalado
-- Expo CLI
-- Android Studio (ou celular com Expo Go)
+| Nome            | RM       |
+| --------------- | -------- |
+| Enrico Ricarte Rodrigues | RM558571 |
+| Pedro Gaspar Fernandes Ferrari | RM554887 |
+| Victor Freire Martins Siqueira | RM556191 |
 
 ---
 
-### 🔧 Instalação
+# ▶️ Como Rodar o Projeto
+
+## 📋 Pré-requisitos
+
+Antes de começar, você precisará ter instalado em sua máquina:
+
+* Node.js
+* npm ou yarn
+* Expo CLI
+* Git
+* Android Studio (opcional para emulador)
+* Expo Go no celular
+
+---
+
+## 📥 Clonando o Repositório
 
 ```bash
-# Clonar o repositório
-git clone https://github.com/BitWise-FIAP/fiap-mdi-cp1-achados-e-perdidos
+# Clonar repositório
+git clone URL_DO_REPOSITORIO
 
-# Entrar na pasta
-cd fiap-mdi-cp1-achados-e-perdidos
+# Entrar na pasta do projeto
+cd fiap-mdi-projeto-ford
+```
 
-# Instalar dependências
+---
+
+## 📦 Instalando Dependências
+
+```bash
 npm install
 ```
 
-▶️ Executar
+ou
 
+```bash
+yarn install
 ```
+
+---
+
+## ▶️ Executando o Projeto
+
+```bash
 npx expo start
 ```
 
-📸 Screenshots e Gif
+Depois disso:
 
-### Gif - Sistema 
-![Sistema](./screens/ScreenRecording_04-29-2026%2010-03-19 PM_1.gif)
+* Pressione `a` para abrir no Android Emulator
+* Ou escaneie o QR Code utilizando o aplicativo Expo Go
 
-### Nova Funcionalidade - Modo Escuro e Telas de Login e Cadastro de Conta
-<p align="center">
-  <img src="./screens/img1.PNG" width="300"/>
-  <img src="./screens/img2.PNG" width="300"/>
-  <img src="./screens/img3.PNG" width="300"/>
-  <img src="./screens/img4.PNG" width="300"/>
-</p>
+---
 
+# 📱 Demonstração Visual
 
-### 🏠 Home
+## 🖼️ Prints das Telas
+
+### Tela de Boas-Vindas
+
+![Tela Inicial](./screens/inicio.png)
+
+---
+
+### Tela de Login
+
+![Tela Login](./screens/login.png)
+
+---
+
+### Tela de Cadastro
+
+![Tela Cadastro](./screens/cadastro.png)
+
+---
+
+### Home do Aplicativo
+
 ![Home](./screens/home.png)
 
-### 📦 Itens
-![Itens](./screens/itens.png)
+---
 
-### 👤 Perfil
+### Tela de Perfil
+
 ![Perfil](./screens/perfil.png)
 
-### 📝 Cadastro
-![Cadastro](./screens/cadastro.png)
+---
+
+### Tela de Serviços
+
+![Serviços](./screens/servicos.png)
+
+---
+
+### Tela de Cadastro Carro
+![Cadastro Carro](./screens/cadastrocarro.png)
+
+---
+
+### Tela da Inteligência Artificial
+
+![IA](./screens/ia.png)
+
+---
+
+## 🎥 Demonstração em Vídeo/GIF
+
+Adicione aqui o GIF ou vídeo demonstrando o fluxo principal do aplicativo.
+
+Exemplo:
+
+```md
+![Demonstração](./screens/demo.gif)
+```
+
+ou link do vídeo:
+
+```md
+https://youtube.com/seu-video
+```
+
+---
+
+# 🛠️ Decisões Técnicas
+
+## 💻 Stack Utilizada
+
+### Front-end Mobile
+
+* React Native
+* Expo
+* JavaScript
+
+### Navegação
+
+* Expo Router
+
+### Inteligência Artificial
+
+* Integração com API de IA para análise e comparação de veículos
+
+---
+
+## 🧱 Estrutura do Projeto
+
+O projeto foi organizado utilizando separação por telas, componentes e rotas, facilitando manutenção e escalabilidade.
+
+---
+
+## 🔗 Integrações Realizadas
+
+* Integração com API de Inteligência Artificial
+* Navegação dinâmica entre telas
+* Fluxo de autenticação
+* Organização de rotas utilizando Expo Router
+
+---
+
+## 🏗️ Decisões de Arquitetura
+
+Durante o desenvolvimento, o grupo optou por:
+
+* Utilizar React Native com Expo para acelerar o desenvolvimento mobile
+* Separar telas e componentes para melhorar organização do código
+* Utilizar navegação baseada em rotas para facilitar escalabilidade
+* Criar uma interface moderna e intuitiva focada na experiência do usuário
+* Integrar IA para tornar o aplicativo mais interativo e inteligente
+
+---
+
+# 🚀 Próximos Passos
+
+Com mais tempo de desenvolvimento, o grupo implementaria:
+
+* Integração com banco de dados real
+* Sistema completo de autenticação
+* Agendamento conectado com concessionárias reais
+* Notificações push
+* Histórico de serviços do veículo
+* Chat em tempo real com suporte
+* Melhorias na IA para recomendações personalizadas
+* Publicação do aplicativo em lojas mobile
+
+---
+
+# 📄 Considerações Finais
+
+Este projeto foi desenvolvido para fins acadêmicos, com foco na aplicação prática de conceitos de desenvolvimento mobile, experiência do usuário, arquitetura de software e integração com inteligência artificial.
