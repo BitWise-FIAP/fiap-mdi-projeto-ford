@@ -168,16 +168,8 @@ Adicione aqui o GIF ou vídeo demonstrando o fluxo principal do aplicativo.
 Exemplo:
 
 ```md
-![Demonstração](./screens/demo.gif)
+![Demonstração](./screens/gif-challenge.gif)
 ```
-
-ou link do vídeo:
-
-```md
-https://youtube.com/seu-video
-```
-
----
 
 # 🛠️ Decisões Técnicas
 
