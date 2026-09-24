@@ -1,42 +1,21 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ActivityIndicator } from 'react-native';
-import { useTheme } from '../ThemeContext';
+import { useAuth } from '../../src/context/AuthContext';
+import { useTheme } from '../../src/context/ThemeContext';
 
 export default function AuthIndex() {
   const router = useRouter();
-  const { tema } = useTheme();
-  const [verificando, setVerificando] = useState(true);
+  const { enterGuest } = useAuth();
+  const { tema, modoEscuro } = useTheme();
 
-  useEffect(() => {
-    const verificarLogin = async () => {
-      const token = await AsyncStorage.getItem('userToken');
-
-      if (token) {
-        router.replace('/(tabs)');
-        return;
-      }
-
-      setVerificando(false);
-    };
-
-    verificarLogin();
-  }, []);
-
-  if (verificando) {
-  return (
-    <View style={[styles.loadingContainer, { backgroundColor: tema.fundo }]}>
-      <ActivityIndicator size="large" color="#087BFF" />
-    </View>
-  );
-  }
-
+  const handleGuest = () => {
+    enterGuest();
+    router.replace('/(tabs)');
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: tema.fundo }]}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle={modoEscuro ? 'light-content' : 'dark-content'} backgroundColor={tema.fundo} />
 
       <View style={styles.content}>
         <Image
@@ -63,6 +42,7 @@ export default function AuthIndex() {
         <TouchableOpacity
           style={styles.botaoEntrar}
           onPress={() => router.push('/(auth)/login')}
+          accessibilityRole="button"
         >
           <Text style={styles.botaoEntrarTexto}>Entrar</Text>
         </TouchableOpacity>
@@ -70,12 +50,13 @@ export default function AuthIndex() {
         <TouchableOpacity
           style={styles.botaoCriar}
           onPress={() => router.push('/(auth)/cadastro')}
+          accessibilityRole="button"
         >
           <Text style={[styles.botaoCriarTexto, { color: tema.texto }]}>Criar conta</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.replace('/(tabs)')}>
-          <Text style={[styles.convidado, { color: tema.subtitulo }]}>Entrar como convidado</Text>
+        <TouchableOpacity onPress={handleGuest} accessibilityRole="button">
+          <Text style={[styles.convidado, { color: tema.subtitulo }]}>Explorar como convidado</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -85,51 +66,42 @@ export default function AuthIndex() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#001B4D',
   },
-
   content: {
     flex: 1,
     paddingHorizontal: 32,
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   logo: {
     width: 220,
     height: 100,
     marginBottom: 4,
   },
-
   titulo: {
     fontSize: 46,
     fontWeight: '900',
     marginBottom: 12,
   },
-
   tituloAzul: {
     color: '#0A74FF',
   },
-
   tituloBranco: {
-    color: '#FFFFFF',
+    fontWeight: '900',
   },
-
   subtitulo: {
-    color: '#FFFFFF',
     fontSize: 22,
     fontWeight: '700',
     textAlign: 'center',
     lineHeight: 30,
     marginBottom: 22,
   },
-
   carro: {
-    width: 360,
-    height: 230,
-    marginBottom: 42,
+    width: '100%',
+    maxWidth: 360,
+    height: 220,
+    marginBottom: 36,
   },
-
   botaoEntrar: {
     width: '100%',
     backgroundColor: '#087BFF',
@@ -138,13 +110,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 14,
   },
-
   botaoEntrarTexto: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '800',
   },
-
   botaoCriar: {
     width: '100%',
     borderWidth: 1.5,
@@ -154,15 +124,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 32,
   },
-
   botaoCriarTexto: {
-    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '800',
   },
-
   convidado: {
-    color: '#9FA8C0',
     fontSize: 14,
     fontWeight: '600',
   },

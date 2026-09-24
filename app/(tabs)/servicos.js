@@ -3,15 +3,15 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import CardServico from '../../components/CardServicos'
-import { useTheme } from '../ThemeContext';
+import { useTheme } from '../../src/context/ThemeContext';
 
 export default function Servicos() {
   const router = useRouter();
-  const { tema } = useTheme();
+  const { tema, modoEscuro } = useTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: tema.fundo }]}>
-      <StatusBar barStyle="light-content" backgroundColor={tema.fundo} />
+      <StatusBar barStyle={modoEscuro ? 'light-content' : 'dark-content'} backgroundColor={tema.fundo} />
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
@@ -32,7 +32,10 @@ export default function Servicos() {
               Com base no uso do seu veículo, recomendamos a troca de óleo em breve.
             </Text>
 
-            <TouchableOpacity style={styles.botao} onPress={() => router.push('/agendamento')}>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => router.push({ pathname: '/agendamento', params: { servico: 'Troca de óleo' } })}
+            >
               <Text style={styles.botaoTexto}>Agendar agora</Text>
             </TouchableOpacity>
           </View>
@@ -46,18 +49,21 @@ export default function Servicos() {
           icon="car-tire-alert"
           title="Alinhamento e balanceamento"
           subtitle="Ideal a cada 10.000 km"
+          onPress={() => router.push({ pathname: '/agendamento', params: { servico: 'Alinhamento e balanceamento' } })}
         />
 
         <CardServico
           icon="car-brake-alert"
           title="Verificação de freios"
           subtitle="Segurança em primeiro lugar"
+          onPress={() => router.push({ pathname: '/agendamento', params: { servico: 'Verificação de freios' } })}
         />
 
         <CardServico
           icon="air-filter"
           title="Higienização do ar"
           subtitle="Mais saúde para você"
+          onPress={() => router.push({ pathname: '/agendamento', params: { servico: 'Higienização do ar' } })}
         />
       </ScrollView>
     </View>

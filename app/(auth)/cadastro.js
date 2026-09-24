@@ -7,10 +7,12 @@ import {
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../ThemeContext';
+import { useAuth } from '../../src/context/AuthContext';
+import { useTheme } from '../../src/context/ThemeContext';
 
 export default function Cadastro() {
-  const { tema } = useTheme();
+  const { tema, modoEscuro } = useTheme();
+  const { signIn } = useAuth();
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
@@ -28,8 +30,10 @@ export default function Cadastro() {
   const validar = () => {
     const novosErros = {};
 
+    const emailNormalizado = email.trim().toLowerCase();
+
     if (nome.trim().length < 2) novosErros.nome = 'Nome deve ter pelo menos 2 caracteres';
-    if (!email.includes('@') || !email.includes('.')) novosErros.email = 'E-mail inválido';
+    if (!/^\S+@\S+\.\S+$/.test(emailNormalizado)) novosErros.email = 'E-mail inválido';
     if (cpf.length < 11) novosErros.cpf = 'CPF inválido';
     if (telefone.length < 10) novosErros.telefone = 'Telefone inválido';
     if (senha.length < 8) novosErros.senha = 'Senha deve ter mínimo 8 caracteres';
@@ -47,24 +51,25 @@ export default function Cadastro() {
       try {
         const usersStr = await AsyncStorage.getItem('users');
         const users = usersStr ? JSON.parse(usersStr) : [];
+        const emailNormalizado = email.trim().toLowerCase();
 
-        if (users.find(u => u.email === email)) {
+        if (users.find((usuario) => usuario.email?.trim().toLowerCase() === emailNormalizado)) {
           Alert.alert('Erro', 'E-mail já cadastrado!');
           return;
         }
 
         const newUser = {
           id: Date.now().toString(),
-          nome,
-          email,
+          nome: nome.trim(),
+          email: emailNormalizado,
           cpf,
           telefone,
-          senha
+          senha,
         };
 
         users.push(newUser);
         await AsyncStorage.setItem('users', JSON.stringify(users));
-        await AsyncStorage.setItem('userToken', newUser.id);
+        await signIn(newUser.id);
 
         Alert.alert('Sucesso!', `Bem-vindo, ${nome}! 🎉`, [
           { text: 'OK', onPress: () => router.replace('/(tabs)') }
@@ -82,7 +87,7 @@ export default function Cadastro() {
       style={[styles.container, { backgroundColor: tema.fundo }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <StatusBar barStyle="light-content" backgroundColor={tema.fundo} />
+      <StatusBar barStyle={modoEscuro ? 'light-content' : 'dark-content'} backgroundColor={tema.fundo} />
 
       <ScrollView
         contentContainerStyle={[styles.content, { backgroundColor: tema.fundo }]}

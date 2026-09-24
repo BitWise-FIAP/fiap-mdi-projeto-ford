@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../app/ThemeContext';
+import { useTheme } from '../src/context/ThemeContext';
 
 export default function CardHome({ icon, title, onPress }) {
   const { tema } = useTheme();

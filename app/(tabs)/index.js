@@ -1,145 +1,143 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-
-import CardPerdido from '../../components/CardAgendamento';
+import CardAgendamento from '../../components/CardAgendamento';
 import CardHome from '../../components/CardHome';
-import Carossel from '../../components/Carrossel';
+import Carrossel from '../../components/Carrossel';
 import CardRisco from '../../components/CardRisco';
-
-import { useTheme } from '../ThemeContext';
-
+import { getUserData } from '../../src/utils/userStorage';
+import { useAuth } from '../../src/context/AuthContext';
+import { useTheme } from '../../src/context/ThemeContext';
 
 export default function Home() {
   const router = useRouter();
   const [userName, setUserName] = useState('Usuário');
+  const [pontos, setPontos] = useState(0);
+  const { isGuest } = useAuth();
   const { tema } = useTheme();
 
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const token = await AsyncStorage.getItem('userToken');
-        if (token) {
-          const usersStr = await AsyncStorage.getItem('users');
-          if (usersStr) {
-            const users = JSON.parse(usersStr);
-            const user = users.find(u => u.id === token);
-            if (user) {
-              setUserName(user.nome);
+  useFocusEffect(
+    useCallback(() => {
+      const carregarDados = async () => {
+        try {
+          const [token, pontosSalvos] = await Promise.all([
+            AsyncStorage.getItem('userToken'),
+            getUserData('pontos', '0'),
+          ]);
+
+          const pontosNumero = Number.parseInt(pontosSalvos, 10);
+          setPontos(Number.isFinite(pontosNumero) ? pontosNumero : 0);
+
+          if (token) {
+            const usersStr = await AsyncStorage.getItem('users');
+            const users = usersStr ? JSON.parse(usersStr) : [];
+            const user = users.find((usuario) => usuario.id === token);
+            if (user?.nome) {
+              setUserName(user.nome.split(' ')[0]);
             }
+          } else if (isGuest) {
+            setUserName('Convidado');
           }
+        } catch (error) {
+          console.log('Erro ao carregar dados da Home:', error);
         }
-      } catch (error) {
-        console.log('Erro ao carregar usuário:', error);
-      }
-    };
-    loadUser();
-  }, []);
+      };
+
+      carregarDados();
+    }, [isGuest])
+  );
+
   return (
-    <ScrollView style={[styles.container, { backgroundColor: tema.fundo }]} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-      <View style={[styles.header, { backgroundColor: tema.fundo }]}>
-        <Text style={[styles.title, { color: tema.texto }]}>Olá, {userName}</Text>
-        <Image source={require('../../assets/logo-ford.png')} style={styles.logo}/>
-      </View>
-      <CardPerdido></CardPerdido>
-      <CardRisco></CardRisco>
-      <View style={styles.section}> 
-        <Carossel></Carossel>
+    <ScrollView
+      style={[styles.container, { backgroundColor: tema.fundo }]}
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={styles.header}>
+        <View style={styles.saudacao}>
+          <Text style={[styles.title, { color: tema.texto }]}>Olá, {userName}</Text>
+          <Text style={[styles.subtitle, { color: tema.subtitulo }]}>Seu Ford conectado.</Text>
+        </View>
+        <Image source={require('../../assets/logo-ford.png')} style={styles.logo} />
       </View>
 
-      <TouchableOpacity style={[styles.cardPontuacao, { backgroundColor: tema.card }]}  onPress={() => router.push('/recompensas')}>
-              <View>
-                <Text style={styles.label}>Veja Sua Pontuação</Text>
-                <Text style={[styles.pontos, { color: tema.texto }]}>2.750 <Text style={styles.pts}>pts</Text></Text>
-              </View>
-      
-              <MaterialCommunityIcons name="seal-variant" size={78} color="#1D7DFF" />
+      <CardAgendamento />
+      <CardRisco />
+      <Carrossel />
+
+      <TouchableOpacity
+        style={[styles.cardPontuacao, { backgroundColor: tema.card, borderColor: tema.borda }]}
+        onPress={() => router.push('/recompensas')}
+        activeOpacity={0.85}
+      >
+        <View>
+          <Text style={styles.label}>Veja sua pontuação</Text>
+          <Text style={[styles.pontos, { color: tema.texto }]}>
+            {pontos.toLocaleString('pt-BR')} <Text style={styles.pts}>pts</Text>
+          </Text>
+        </View>
+        <MaterialCommunityIcons name="seal-variant" size={78} color="#1D7DFF" />
       </TouchableOpacity>
-      
-      <View style={styles.section}> 
-       <View style={styles.actions}>
+
+      <View style={styles.actions}>
         <CardHome
           icon="car-outline"
-          title="Adicionar Carro"
-          onPress={() => router.push('/cadastro')}
+          title="Adicionar carro"
+          onPress={() => router.push('/(tabs)/cadastro')}
         />
-
         <CardHome
           icon="eye-outline"
           title="Ver todos os carros"
-          onPress={() => router.push('/(tabs)')}
+          onPress={() => router.push('/carros')}
         />
-
         <CardHome
           icon="chatbubble-outline"
           title="Falar com suporte"
           onPress={() => router.push('/suporte')}
         />
-        </View>
+        <CardHome
+          icon="person-outline"
+          title="Ir para o perfil"
+          onPress={() => router.push('/(tabs)/perfil')}
+        />
       </View>
-
-      {/* <Text style={styles.titulo}>🏠 Home</Text> */}
-     <View style={styles.buttonContainer}>
-  <TouchableOpacity style={[styles.button, { backgroundColor: tema.card }]}>
-    <Text style={[styles.buttonText, { color: tema.texto }]} onPress={() => router.push('/perfil')}>Ir para Perfil</Text>
-  </TouchableOpacity>
-</View>
-      
-      
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F9F9FB' },
-  // titulo:    { fontSize: 32, fontWeight: 'bold', marginBottom: 24 },
-   content: {
+  container: { flex: 1 },
+  content: {
     padding: 16,
     paddingBottom: 100,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  saudacao: {
+    flex: 1,
   },
   title: {
     fontSize: 25,
     fontWeight: '900',
-    color: '#111',
-    // marginBottom: 20,
-    // marginTop: 10, 
   },
-  
-  // botao:     { backgroundColor: '#E83D84', padding: 16, borderRadius: 12, alignItems: "center" },
-
-  buttonContainer: {
-    alignItems: 'center',
-    marginTop: 16,
-  },
-
-  button: {
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-  },
-
-  buttonText: {
+  subtitle: {
+    fontSize: 13,
     fontWeight: '600',
-    fontSize: 16,
+    marginTop: 3,
   },
-
-  header: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  marginBottom: 20,
-},
-
-
-logo: {
-  width: 100,
-  height: 50,
-  resizeMode: 'contain',
-},
-
+  logo: {
+    width: 100,
+    height: 50,
+    resizeMode: 'contain',
+  },
   cardPontuacao: {
     borderRadius: 14,
     padding: 18,
@@ -147,19 +145,24 @@ logo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 4,
+    borderWidth: 1,
   },
-
-   label: {
+  label: {
     color: '#2F8CFF',
     fontSize: 16,
     fontWeight: '800',
     marginBottom: 8,
   },
-
-   pontos: {
+  pontos: {
     fontSize: 30,
     fontWeight: '900',
   },
-
+  pts: {
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  actions: {
+    marginTop: 8,
+  },
 });

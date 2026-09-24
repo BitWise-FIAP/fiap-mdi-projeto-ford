@@ -1,39 +1,65 @@
+import { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from './ThemeContext';
+import { useTheme } from '../src/context/ThemeContext';
+import { getJsonUserData } from '../src/utils/userStorage';
 
-const solicitacoes = [
-  {
-    id: 1,
-    item: 'Chaves',
-    local: 'Recepção',
-    data: '08/04/2026',
-    status: 'Em análise',
-    statusColor: '#F5A623',
-    statusBg: '#FFF4DB',
-  },
-  {
-    id: 2,
-    item: 'Carteira',
-    local: 'Biblioteca',
-    data: '07/04/2026',
-    status: 'Aprovada',
-    statusColor: '#2E9B57',
-    statusBg: '#EAF8EF',
-  },
-  {
-    id: 3,
-    item: 'Garrafa',
-    local: 'Sala 201',
-    data: '05/04/2026',
-    status: 'Retirada concluída',
-    statusColor: '#4A6CF7',
-    statusBg: '#EEF2FF',
-  },
-];
+function formatDate(value) {
+  if (!value) return 'Data não informada';
+  if (value.includes?.('-') && value.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    return new Intl.DateTimeFormat('pt-BR').format(new Date(`${value}T12:00:00`));
+  }
+  return value;
+}
+
+function statusColors(status, tema) {
+  const normalized = status?.toLowerCase() || '';
+  if (normalized.includes('agendado') || normalized.includes('análise')) {
+    return { color: '#F59E0B', backgroundColor: modoSeguro('#FEF3C7', tema) };
+  }
+  if (normalized.includes('retirada') || normalized.includes('andamento')) {
+    return { color: '#2563EB', backgroundColor: modoSeguro('#DBEAFE', tema) };
+  }
+  return { color: '#16A34A', backgroundColor: modoSeguro('#DCFCE7', tema) };
+}
+
+function modoSeguro(color, tema) {
+  return tema.card === '#FFFFFF' ? color : `${color}22`;
+}
 
 export default function Historico() {
   const { tema } = useTheme();
+  const [registros, setRegistros] = useState([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const carregar = async () => {
+        const [carros, agendamentos] = await Promise.all([
+          getJsonUserData('carros', []),
+          getJsonUserData('agendamentos', []),
+        ]);
+
+        const veiculos = Array.isArray(carros) ? carros : [];
+        const historicoVeiculos = veiculos.flatMap((carro) =>
+          (Array.isArray(carro.historico) ? carro.historico : []).map((servico) => ({
+            ...servico,
+            veiculo: carro.nome,
+          }))
+        );
+        const historicoAgendamentos = (Array.isArray(agendamentos) ? agendamentos : []).map((agendamento) => ({
+          ...agendamento,
+          titulo: agendamento.servico,
+          data: agendamento.data,
+        }));
+
+        setRegistros([...historicoAgendamentos, ...historicoVeiculos]);
+      };
+
+      carregar();
+    }, [])
+  );
+
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: tema.fundo }]}
@@ -41,209 +67,84 @@ export default function Historico() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header}>
-        <Text style={[styles.title, {color: tema.texto}]}>Histórico de Revisões</Text>
-        <Text style={styles.subtitle}>
-          Acompanhe o andamento das suas solicitações de retirada de itens.
-        </Text>
+        <Text style={[styles.title, { color: tema.texto }]}>Histórico de serviços</Text>
+        <Text style={[styles.subtitle, { color: tema.subtitulo }]}>Acompanhe os serviços e agendamentos dos seus veículos.</Text>
       </View>
 
       <View style={[styles.highlightCard, { backgroundColor: tema.card, borderColor: tema.borda }]}>
-        <View style={[styles.highlightIcon, { backgroundColor: tema.card }]}>
+        <View style={[styles.highlightIcon, { backgroundColor: tema.divisor }]}>
           <Ionicons name="time-outline" size={24} color="#1D7DFF" />
         </View>
-
         <View style={styles.highlightTextArea}>
-          <Text style={styles.highlightTitle}>Acompanhe em tempo real</Text>
-          <Text style={styles.highlightText}>
-            Veja o status atualizado de cada item solicitado no sistema.
-          </Text>
+          <Text style={[styles.highlightTitle, { color: tema.texto }]}>Tudo em um só lugar</Text>
+          <Text style={[styles.highlightText, { color: tema.subtitulo }]}>Consulte o histórico dos seus veículos e agendamentos.</Text>
         </View>
       </View>
 
-      <Text style={[styles.sectionTitle, {color: tema.texto}]}>Suas solicitações</Text>
+      <Text style={[styles.sectionTitle, { color: tema.texto }]}>Seus serviços</Text>
 
-      {solicitacoes.map((solicitacao) => (
-        <TouchableOpacity key={solicitacao.id} style={[styles.requestCard, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.85}>
-          <View style={styles.cardTop}>
+      {registros.length ? registros.map((registro) => {
+        const status = statusColors(registro.status, tema);
+        return (
+          <View key={registro.id} style={[styles.requestCard, { backgroundColor: tema.card, borderColor: tema.borda }]}>
             <View style={styles.itemLeft}>
               <View style={styles.iconBox}>
-                <Ionicons name="cube-outline" size={20} color="#1D7DFF" />
+                <Ionicons name="construct-outline" size={20} color="#1D7DFF" />
               </View>
-
-              <View>
-                  <Text style={[styles.itemTitle, {color: tema.texto}]}>{solicitacao.item}</Text>
-                <Text style={styles.itemSubtitle}>Local: {solicitacao.local}</Text>
+              <View style={styles.itemInfo}>
+                <Text style={[styles.itemTitle, { color: tema.texto }]}>{registro.titulo || 'Serviço'}</Text>
+                <Text style={[styles.itemSubtitle, { color: tema.subtitulo }]}>
+                  {registro.veiculo || 'Veículo'} • {registro.concessionaria || 'Concessionária não informada'}
+                </Text>
               </View>
             </View>
 
-          </View>
-
-          <View style={styles.cardBottom}>
-            <View style={styles.infoRow}>
-              <Ionicons name="calendar-outline" size={15} color="#1D7DFF" />
-              <Text style={styles.infoText}>{solicitacao.data}</Text>
-            </View>
-
-            <View
-              style={[
-                styles.statusBadge,
-                { backgroundColor: solicitacao.statusBg },
-              ]}
-            >
-              <Text style={[styles.statusText, { color: solicitacao.statusColor }]}>
-                {solicitacao.status}
-              </Text>
+            <View style={styles.cardBottom}>
+              <View style={styles.infoRow}>
+                <Ionicons name="calendar-outline" size={15} color="#1D7DFF" />
+                <Text style={[styles.infoText, { color: tema.subtitulo }]}>{formatDate(registro.data)}</Text>
+              </View>
+              <View style={[styles.statusBadge, { backgroundColor: status.backgroundColor }]}>
+                <Text style={[styles.statusText, { color: status.color }]}>{registro.status || 'Concluído'}</Text>
+              </View>
             </View>
           </View>
-        </TouchableOpacity>
-      ))}
-
-      <View style={[styles.tipCard, { backgroundColor: tema.card, borderColor: tema.borda }]}>
-        <Ionicons name="information-circle-outline" size={20} color="#1D7DFF" />
-        <Text style={styles.tipText}>
-          Você será avisado quando houver atualização no status de uma solicitação.
-        </Text>
-      </View>
+        );
+      }) : (
+        <View style={[styles.emptyCard, { backgroundColor: tema.card, borderColor: tema.borda }]}>
+          <Ionicons name="file-tray-outline" size={28} color="#1D7DFF" />
+          <Text style={[styles.emptyTitle, { color: tema.texto }]}>Nenhum serviço registrado</Text>
+          <Text style={[styles.emptyText, { color: tema.subtitulo }]}>Agende um serviço para que ele apareça neste histórico.</Text>
+        </View>
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F9F9FB',
-  },
-  content: {
-    padding: 16,
-    paddingBottom: 40,
-  },
-  header: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#111111',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 15,
-    color: '#666666',
-    lineHeight: 22,
-  },
-  highlightCard: {
-    borderRadius: 18,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 24,
-    borderWidth: 1,
-  },
-  highlightIcon: {
-    width: 46,
-    height: 46,
-    borderRadius: 23,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  highlightTextArea: {
-    flex: 1,
-  },
-  highlightTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: '#111111',
-    marginBottom: 4,
-  },
-  highlightText: {
-    fontSize: 14,
-    color: '#666666',
-    lineHeight: 20,
-  },
-  sectionTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: '#111111',
-    marginBottom: 12,
-  },
-  requestCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: '#EFEFF2',
-    padding: 15,
-    marginBottom: 12,
-  },
-  cardTop: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  itemLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  iconBox: {
-    width: 42,
-    height: 42,
-    borderRadius: 14,
-    backgroundColor: '#d9e6f8',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  itemTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#111111',
-    marginBottom: 2,
-  },
-  itemSubtitle: {
-    fontSize: 13,
-    color: '#777777',
-  },
-  cardBottom: {
-    marginTop: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  infoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  infoText: {
-    marginLeft: 6,
-    fontSize: 13,
-    color: '#777777',
-  },
-  statusBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
-  },
-  statusText: {
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  tipCard: {
-    marginTop: 12,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#EFEFF2',
-    padding: 14,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  tipText: {
-    flex: 1,
-    marginLeft: 10,
-    fontSize: 13,
-    color: '#666666',
-    lineHeight: 19,
-  },
+  container: { flex: 1 },
+  content: { padding: 16, paddingBottom: 40 },
+  header: { marginBottom: 20 },
+  title: { fontSize: 28, fontWeight: '900', marginBottom: 8 },
+  subtitle: { fontSize: 15, fontWeight: '600', lineHeight: 22 },
+  highlightCard: { borderRadius: 18, padding: 16, flexDirection: 'row', alignItems: 'center', marginBottom: 24, borderWidth: 1 },
+  highlightIcon: { width: 46, height: 46, borderRadius: 23, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  highlightTextArea: { flex: 1 },
+  highlightTitle: { fontSize: 17, fontWeight: '800', marginBottom: 4 },
+  highlightText: { fontSize: 14, fontWeight: '600', lineHeight: 20 },
+  sectionTitle: { fontSize: 17, fontWeight: '800', marginBottom: 12 },
+  requestCard: { borderRadius: 18, borderWidth: 1, padding: 15, marginBottom: 12 },
+  itemLeft: { flexDirection: 'row', alignItems: 'center' },
+  iconBox: { width: 42, height: 42, borderRadius: 14, backgroundColor: 'rgba(29, 125, 255, 0.14)', alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  itemInfo: { flex: 1 },
+  itemTitle: { fontSize: 16, fontWeight: '800', marginBottom: 2 },
+  itemSubtitle: { fontSize: 12, fontWeight: '600', lineHeight: 18 },
+  cardBottom: { marginTop: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  infoRow: { flexDirection: 'row', alignItems: 'center' },
+  infoText: { marginLeft: 6, fontSize: 12, fontWeight: '600' },
+  statusBadge: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999 },
+  statusText: { fontSize: 12, fontWeight: '800' },
+  emptyCard: { borderRadius: 18, borderWidth: 1, padding: 24, alignItems: 'center' },
+  emptyTitle: { fontSize: 16, fontWeight: '800', marginTop: 10 },
+  emptyText: { fontSize: 13, fontWeight: '600', textAlign: 'center', marginTop: 5 },
 });

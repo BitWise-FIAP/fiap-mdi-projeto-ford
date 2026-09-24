@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useTheme } from '../app/ThemeContext';
+import { useTheme } from '../src/context/ThemeContext';
 
 export default function CardAgendamento() {
   const router = useRouter();

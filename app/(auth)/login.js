@@ -8,10 +8,12 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../ThemeContext';
+import { useAuth } from '../../src/context/AuthContext';
+import { useTheme } from '../../src/context/ThemeContext';
 
 export default function Login() {
-  const { tema } = useTheme();
+  const { tema, modoEscuro } = useTheme();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [senhaVisivel, setSenhaVisivel] = useState(false);
@@ -21,8 +23,15 @@ export default function Login() {
 
   const validar = () => {
     const novosErros = {};
-    if (!email.includes('@')) novosErros.email = 'E-mail inválido';
-    if (senha.length < 6) novosErros.senha = 'Senha deve ter mínimo 6 caracteres';
+    const emailNormalizado = email.trim().toLowerCase();
+
+    if (!/^\S+@\S+\.\S+$/.test(emailNormalizado)) {
+      novosErros.email = 'E-mail inválido';
+    }
+    if (senha.length < 8) {
+      novosErros.senha = 'Senha deve ter mínimo 8 caracteres';
+    }
+
     setErros(novosErros);
     return Object.keys(novosErros).length === 0;
   };
@@ -33,10 +42,13 @@ export default function Login() {
       try {
         const usersStr = await AsyncStorage.getItem('users');
         const users = usersStr ? JSON.parse(usersStr) : [];
-        const user = users.find(u => u.email === email && u.senha === senha);
+        const emailNormalizado = email.trim().toLowerCase();
+        const user = users.find(
+          (usuario) => usuario.email?.trim().toLowerCase() === emailNormalizado && usuario.senha === senha
+        );
 
         if (user) {
-          await AsyncStorage.setItem('userToken', user.id);
+          await signIn(user.id);
           Alert.alert('Sucesso!', `Bem-vindo, ${user.nome}! 🎉`, [
             { text: 'OK', onPress: () => router.replace('/(tabs)') }
           ]);
@@ -56,7 +68,7 @@ export default function Login() {
       style={[styles.container, { backgroundColor: tema.fundo }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <StatusBar barStyle="light-content" backgroundColor={tema.fundo} />
+      <StatusBar barStyle={modoEscuro ? 'light-content' : 'dark-content'} backgroundColor={tema.fundo} />
 
       <View style={styles.content}>
         <Image
@@ -112,7 +124,10 @@ export default function Login() {
 
         {erros.senha && <Text style={styles.erro}>{erros.senha}</Text>}
 
-        <TouchableOpacity style={styles.esqueciBotao}>
+        <TouchableOpacity
+          style={styles.esqueciBotao}
+          onPress={() => Alert.alert('Recuperação de senha', 'A recuperação por e-mail será conectada à API do projeto em uma próxima etapa.')}
+        >
           <Text style={styles.esqueciTexto}>Esqueci minha senha</Text>
         </TouchableOpacity>
 
@@ -141,15 +156,27 @@ export default function Login() {
         <Text style={[styles.socialTexto, { color: tema.subtitulo }]}>ou entre com</Text>
 
         <View style={styles.socialContainer}>
-          <TouchableOpacity style={styles.socialCircle}>
+          <TouchableOpacity
+            style={styles.socialCircle}
+            onPress={() => Alert.alert('Login com Google', 'Este método estará disponível quando a autenticação for integrada à API.')}
+            accessibilityLabel="Entrar com Google"
+          >
             <Text style={styles.google}>G</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.socialCircle}>
+          <TouchableOpacity
+            style={styles.socialCircle}
+            onPress={() => Alert.alert('Login com Apple', 'Este método estará disponível quando a autenticação for integrada à API.')}
+            accessibilityLabel="Entrar com Apple"
+          >
             <Text style={styles.apple}></Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.socialCircle, styles.facebookCircle]}>
+          <TouchableOpacity
+            style={[styles.socialCircle, styles.facebookCircle]}
+            onPress={() => Alert.alert('Login com Facebook', 'Este método estará disponível quando a autenticação for integrada à API.')}
+            accessibilityLabel="Entrar com Facebook"
+          >
             <Text style={styles.facebook}>f</Text>
           </TouchableOpacity>
         </View>
@@ -283,7 +310,7 @@ icone: {
   },
 
   cadastroBotao: {
-    marginBottom: 70,
+    marginBottom: 36,
   },
 
   cadastroTexto: {

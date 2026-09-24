@@ -1,24 +1,25 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { useTheme } from '../app/ThemeContext';
+import { useTheme } from '../src/context/ThemeContext';
 
 export default function CardRisco() {
-    const { tema } = useTheme();
+  const { tema } = useTheme();
+  const pontuacao = 18;
+
   return (
-    <View style={[styles.card, { backgroundColor: tema.card }]}>
+    <View style={[styles.card, { backgroundColor: tema.card, borderColor: tema.borda }]}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.label}>Churn Risk Score</Text>
-          <Text style={styles.risco}>Baixo risco</Text>
+          <Text style={styles.label}>Saúde da relação Ford</Text>
+          <Text style={[styles.risco, { color: tema.texto }]}>Baixo risco</Text>
         </View>
-
-        <Text style={styles.percentual}>18<Text style={styles.simbolo}>%</Text></Text>
+        <Text style={styles.percentual}>{pontuacao}<Text style={styles.simbolo}>%</Text></Text>
       </View>
 
-      <View style={styles.progressBackground}>
-        <View style={styles.progressFill} />
+      <View style={[styles.progressBackground, { backgroundColor: tema.divisor }]}>
+        <View style={[styles.progressFill, { width: `${pontuacao}%` }]} />
       </View>
 
-      <Text style={styles.mensagem}>
+      <Text style={[styles.mensagem, { color: tema.subtitulo }]}>
         <Text style={styles.destaque}>Excelente! </Text>
         Você está no caminho certo.
       </Text>
@@ -28,68 +29,55 @@ export default function CardRisco() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#071B3B',
     borderRadius: 14,
     padding: 16,
     width: '100%',
     marginTop: 20,
+    borderWidth: 1,
   },
-
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginBottom: 18,
   },
-
   label: {
     color: '#2F8CFF',
     fontSize: 14,
     fontWeight: '800',
     marginBottom: 8,
   },
-
   risco: {
-    color: '#FFFFFF',
     fontSize: 22,
     fontWeight: '800',
   },
-
   percentual: {
-    color: '#78F34D',
+    color: '#22C55E',
     fontSize: 42,
     fontWeight: '800',
   },
-
   simbolo: {
     fontSize: 22,
     fontWeight: '800',
   },
-
   progressBackground: {
     width: '100%',
     height: 8,
     borderRadius: 8,
-    backgroundColor: '#223A5F',
     marginBottom: 18,
     overflow: 'hidden',
   },
-
   progressFill: {
-    width: '18%',
     height: '100%',
     borderRadius: 8,
-    backgroundColor: '#78F34D',
+    backgroundColor: '#22C55E',
   },
-
   mensagem: {
-    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '600',
   },
-
   destaque: {
-    color: '#78F34D',
+    color: '#22C55E',
     fontWeight: '800',
   },
 });

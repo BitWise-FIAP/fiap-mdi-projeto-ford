@@ -10,7 +10,11 @@ export function ThemeProvider({ children }) {
     const carregarTema = async () => {
       const valor = await AsyncStorage.getItem('modoEscuro');
       if (valor !== null) {
-        setModoEscuro(JSON.parse(valor));
+        try {
+          setModoEscuro(JSON.parse(valor));
+        } catch (error) {
+          console.log('Tema salvo inválido:', error);
+        }
       }
     };
     carregarTema();

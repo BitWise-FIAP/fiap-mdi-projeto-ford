@@ -1,233 +1,88 @@
-# 🚗 Ford Client Manager App
+# Ford VINculo
 
-## 📌 Sobre o Projeto
+Aplicativo mobile de gestão de veículos Ford, desenvolvido com Expo e React Native.
 
-O **Ford Client Manager App** é um aplicativo mobile desenvolvido com foco no gerenciamento e experiência do cliente da Ford. O projeto foi criado como solução para o desafio proposto pela Ford, com o objetivo de centralizar funcionalidades importantes em um único aplicativo moderno, intuitivo e acessível.
+## O que está implementado
 
-O desafio escolhido pelo grupo teve como foco melhorar a experiência do cliente através de tecnologia mobile, trazendo praticidade no gerenciamento de informações, agendamentos e suporte inteligente.
+- Tela de boas-vindas;
+- Login e cadastro local para demonstração;
+- Modo convidado;
+- Cadastro e visualização de veículos;
+- Lista de veículos da conta e veículos de demonstração;
+- Recomendações de manutenção;
+- Agendamento com data, horário e concessionária;
+- Histórico de serviços e agendamentos;
+- Pontuação e recompensas;
+- Comparador de veículos com IA via Groq;
+- Perfil e edição de dados;
+- Configurações de tema, notificações e localização;
+- Suporte e perguntas frequentes;
+- Tema claro e escuro.
 
-### 🎯 Objetivo do Desafio
+## Executar localmente
 
-Desenvolver uma solução mobile capaz de melhorar a interação do cliente com a Ford, oferecendo uma experiência mais moderna, organizada e eficiente.
+### Pré-requisitos
 
-### ❓ Por que escolhemos esse desafio?
+- Node.js;
+- npm;
+- Expo Go ou emulador Android;
+- Android Studio (opcional).
 
-O grupo escolheu este desafio por acreditar que a experiência do usuário é um dos pontos mais importantes atualmente para empresas do setor automotivo. A proposta permitiu unir desenvolvimento mobile, interface moderna e integração com inteligência artificial, além de trabalhar conceitos importantes de UX/UI e arquitetura de software.
-
----
-
-# ⚙️ Funcionalidades Implementadas
-
-✅ Tela de Boas-Vindas
-
-✅ Sistema de Login
-
-✅ Sistema de Cadastro
-
-✅ Navegação entre telas
-
-✅ Home principal do aplicativo
-
-✅ Cards informativos
-
-✅ Tela de Perfil do usuário
-
-✅ Sistema de agendamento
-
-✅ Fluxo de telas organizado
-
-✅ Interface responsiva e moderna
-
-✅ Integração com Inteligência Artificial
-
-✅ Assistente IA para análise/comparação de veículos
-
-✅ Organização de imagens/screenshots para documentação
-
----
-
-# 👨‍💻 Integrantes do Grupo
-
-| Nome            | RM       |
-| --------------- | -------- |
-| Enrico Ricarte Rodrigues | RM558571 |
-| Pedro Gaspar Fernandes Ferrari | RM554887 |
-| Victor Freire Martins Siqueira | RM556191 |
-
----
-
-# ▶️ Como Rodar o Projeto
-
-## 📋 Pré-requisitos
-
-Antes de começar, você precisará ter instalado em sua máquina:
-
-* Node.js
-* npm ou yarn
-* Expo CLI
-* Git
-* Android Studio (opcional para emulador)
-* Expo Go no celular
-
----
-
-## 📥 Clonando o Repositório
+### Instalação
 
 ```bash
-# Clonar repositório
-git clone URL_DO_REPOSITORIO
-
-# Entrar na pasta do projeto
-cd fiap-mdi-projeto-ford
+npm install --legacy-peer-deps
 ```
 
----
+### Configurar a IA
 
-## 📦 Instalando Dependências
+O app utiliza a API da Groq para comparar veículos. Crie um arquivo `.env` na raiz do projeto:
 
-```bash
-npm install
+```env
+EXPO_PUBLIC_GROQ_API_KEY=gsk_sua_chave_aqui
 ```
 
-ou
+Não compartilhe a chave em commits, prints ou vídeos. O arquivo `.env` não deve ser versionado. Como o prefixo `EXPO_PUBLIC_` incorpora o valor ao bundle mobile, essa configuração serve apenas para a demonstração acadêmica; em produção, a chamada deve passar por um backend que proteja a chave.
 
-```bash
-yarn install
-```
+Para builds na nuvem, cadastre a variável `EXPO_PUBLIC_GROQ_API_KEY` no ambiente do EAS em vez de enviar o arquivo `.env` para o repositório.
 
----
-
-## ▶️ Executando o Projeto
+### Iniciar o app
 
 ```bash
 npx expo start
 ```
 
-Depois disso:
+Para gerar um APK de demonstração com EAS:
 
-* Pressione `a` para abrir no Android Emulator
-* Ou escaneie o QR Code utilizando o aplicativo Expo Go
+```bash
+npx eas login
+npx eas build --profile preview --platform android
+```
 
----
+## Organização
 
-# 📱 Demonstração Visual
+```text
+app/
+  (auth)/       login, cadastro e boas-vindas
+  (tabs)/       Home, IA, serviços, cadastro de veículo e perfil
+src/
+  context/      autenticação e tema
+  utils/        armazenamento local por usuário
+components/    componentes reutilizáveis
+assets/        imagens e ícones
+screens/       screenshots usados na documentação
+```
 
-## 🖼️ Prints das Telas
+## Persistência atual
 
-### Tela de Boas-Vindas
+Nesta etapa, o app funciona sem backend Java. Os dados são persistidos localmente com `AsyncStorage`, separados por usuário quando aplicável. O modo convidado utiliza o escopo `guest`.
 
-![Tela Inicial](./screens/inicio.png)
+A API Java/Spring Boot, JWT real, banco de dados, testes de integração e OpenAPI serão adicionados em uma etapa posterior do projeto. A integração atual da IA é direta com a Groq e deve ser migrada para um backend antes de uma versão de produção.
 
----
+## Segurança e limitações
 
-### Tela de Login
+A autenticação atual é local e serve apenas para demonstração. Senhas não devem ser consideradas seguras em produção. Para a versão final, a autenticação e os dados deverão ser validados por uma API com hash de senha, JWT, HTTPS, controle de acesso e tratamento de erros.
 
-![Tela Login](./screens/login.png)
+## Identidade visual
 
----
-
-### Tela de Cadastro
-
-![Tela Cadastro](./screens/cadastro.png)
-
----
-
-### Home do Aplicativo
-
-![Home](./screens/home.png)
-
----
-
-### Tela de Perfil
-
-![Perfil](./screens/perfil.png)
-
----
-
-### Tela de Serviços
-
-![Serviços](./screens/servicos.png)
-
----
-
-### Tela de Cadastro Carro
-![Cadastro Carro](./screens/cadastrocarro.png)
-
----
-
-### Tela da Inteligência Artificial
-
-![IA](./screens/ia.png)
-
----
-
-## 🎥 Demonstração em Vídeo/GIF
-
-![Demonstração](./screens/gif-challenge.gif)
-
-
-# 🛠️ Decisões Técnicas
-
-## 💻 Stack Utilizada
-
-### Front-end Mobile
-
-* React Native
-* Expo
-* JavaScript
-
-### Navegação
-
-* Expo Router
-
-### Inteligência Artificial
-
-* Integração com API de IA para análise e comparação de veículos
-
----
-
-## 🧱 Estrutura do Projeto
-
-O projeto foi organizado utilizando separação por telas, componentes e rotas, facilitando manutenção e escalabilidade.
-
----
-
-## 🔗 Integrações Realizadas
-
-* Integração com API de Inteligência Artificial
-* Navegação dinâmica entre telas
-* Fluxo de autenticação
-* Organização de rotas utilizando Expo Router
-
----
-
-## 🏗️ Decisões de Arquitetura
-
-Durante o desenvolvimento, o grupo optou por:
-
-* Utilizar React Native com Expo para acelerar o desenvolvimento mobile
-* Separar telas e componentes para melhorar organização do código
-* Utilizar navegação baseada em rotas para facilitar escalabilidade
-* Criar uma interface moderna e intuitiva focada na experiência do usuário
-* Integrar IA para tornar o aplicativo mais interativo e inteligente
-
----
-
-# 🚀 Próximos Passos
-
-Com mais tempo de desenvolvimento, o grupo implementaria:
-
-* Integração com banco de dados real
-* Sistema completo de autenticação
-* Agendamento conectado com concessionárias reais
-* Notificações push
-* Histórico de serviços do veículo
-* Chat em tempo real com suporte
-* Melhorias na IA para recomendações personalizadas
-* Publicação do aplicativo em lojas mobile
-
----
-
-# 📄 Considerações Finais
-
-Este projeto foi desenvolvido para fins acadêmicos, com foco na aplicação prática de conceitos de desenvolvimento mobile, experiência do usuário, arquitetura de software e integração com inteligência artificial.
+O app utiliza uma identidade baseada em Ford, com azul, fundo escuro e suporte a tema claro. Os screenshots em `screens/` devem ser atualizados após uma nova build para refletirem a versão atual.

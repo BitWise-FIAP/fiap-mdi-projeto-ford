@@ -1,24 +1,28 @@
 {
   "expo": {
-    "name": "AchadosEPerdidosApp",
-    "slug": "AchadosEPerdidosApp",
+    "name": "Ford VINculo",
+    "slug": "ford-vinculo",
+    "scheme": "fordvinculo",
+    "description": "Aplicativo mobile para gestão de veículos, serviços e recompensas Ford.",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000D24"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.fiap.fordvinculo"
     },
     "android": {
+      "package": "com.fiap.fordvinculo",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#000D24"
       },
       "edgeToEdgeEnabled": true
     },
@@ -26,7 +30,21 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
-    ]
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permita o acesso à galeria para escolher uma imagem do veículo.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "0097b5ae-c201-4885-b001-73c149a25925"
+      }
+    }
   }
 }

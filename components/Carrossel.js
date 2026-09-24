@@ -1,12 +1,12 @@
+import { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
-import { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../app/ThemeContext';
+import { useTheme } from '../src/context/ThemeContext';
+import { getJsonUserData } from '../src/utils/userStorage';
 
-const carrosTemplate = [
+export const carrosTemplate = [
   {
     id: 'template-1',
     nome: 'Ford Ranger Raptor',
@@ -14,11 +14,30 @@ const carrosTemplate = [
     cor: 'Azul',
     placa: 'ABC1D23',
     km: '32.450 km',
+    vin: 'DEMO-RANGER-RAPTOR',
     proximaRevisao: '5.000 km',
     garantiaStatus: 'Ativa',
-    garantiaValidade: 'até 12/07/2026',
+    garantiaValidade: 'consulte a concessionária',
     planoManutencao: 'Premium Care',
     imagem: require('../assets/ranger-azul.png'),
+    historico: [
+      {
+        id: 'template-service-1',
+        titulo: 'Revisão 30.000 km',
+        data: '12/03/2026',
+        concessionaria: 'Ford Mix',
+        descricao: 'Óleo e filtros',
+        status: 'Concluído',
+      },
+      {
+        id: 'template-service-2',
+        titulo: 'Revisão 20.000 km',
+        data: '18/09/2025',
+        concessionaria: 'Ford Mix',
+        descricao: 'Óleo, filtros e alinhamento',
+        status: 'Concluído',
+      },
+    ],
   },
   {
     id: 'template-2',
@@ -27,33 +46,49 @@ const carrosTemplate = [
     cor: 'Vermelha',
     placa: 'XYZ4E56',
     km: '18.200 km',
+    vin: 'DEMO-RANGER-LIMITED',
     proximaRevisao: '8.000 km',
     garantiaStatus: 'Ativa',
-    garantiaValidade: 'até 03/11/2027',
+    garantiaValidade: 'consulte a concessionária',
     planoManutencao: 'Premium Care',
     imagem: require('../assets/ranger-vermelha.png'),
+    historico: [],
   },
 ];
 
+function resolveImageSource(imagem) {
+  if (typeof imagem === 'number') {
+    return imagem;
+  }
+  return imagem ? { uri: imagem } : null;
+}
+
 function CarCard({ item, onPress }) {
   const { tema } = useTheme();
-  const imagemSource = typeof item.imagem === 'string' && item.imagem.startsWith('file://')
-    ? { uri: item.imagem }
-    : item.imagem;
+  const imageSource = resolveImageSource(item.imagem);
+  const isTemplate = item.id?.startsWith('template-');
+
   return (
-    <TouchableOpacity style={[styles.card, { backgroundColor: tema.card }, {borderColor: tema.borda}]} activeOpacity={0.85} onPress={onPress}>
-      <Image source={imagemSource} style={styles.image} />
+    <TouchableOpacity
+      style={[styles.card, { backgroundColor: tema.card, borderColor: tema.borda }]}
+      activeOpacity={0.85}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`Abrir detalhes de ${item.nome}`}
+    >
+      {imageSource ? <Image source={imageSource} style={styles.image} /> : <View style={[styles.image, styles.semImagem]} />}
 
       <View style={styles.info}>
         <Text style={[styles.nome, { color: tema.texto }]} numberOfLines={2}>
           {item.nome}
         </Text>
-
+        <Text style={[styles.badge, { color: isTemplate ? tema.subtitulo : '#1D7DFF' }]}>
+          {isTemplate ? 'Demonstração' : 'Meu veículo'}
+        </Text>
         <View style={styles.row}>
           <Ionicons name="calendar-outline" size={13} color="#1D7DFF" />
           <Text style={[styles.meta, { color: tema.subtitulo }]}>{item.ano}</Text>
         </View>
-
         <View style={styles.row}>
           <Ionicons name="color-palette-outline" size={13} color="#1D7DFF" />
           <Text style={[styles.meta, { color: tema.subtitulo }]}>{item.cor}</Text>
@@ -73,42 +108,43 @@ export default function Carrossel() {
   useFocusEffect(
     useCallback(() => {
       const carregarCarros = async () => {
-        try {
-          const stored = await AsyncStorage.getItem('carros');
-          if (stored) {
-            const carrosUsuario = JSON.parse(stored);
-            setCarros([...carrosTemplate, ...carrosUsuario]);
-          } else {
-            setCarros(carrosTemplate);
-          }
-        } catch (error) {
-          console.log('Erro ao carregar carros:', error);
-        }
+        const carrosUsuario = await getJsonUserData('carros', []);
+        const listaValida = Array.isArray(carrosUsuario) ? carrosUsuario : [];
+        setCarros([...carrosTemplate, ...listaValida]);
       };
+
       carregarCarros();
     }, [])
   );
 
   const abrirCarro = (carro) => {
-    const dados = {
-      id: carro.id,
-      nome: carro.nome,
-      ano: carro.ano,
-      cor: carro.cor,
-      placa: carro.placa || '—',
-      km: carro.km || '—',
-      proximaRevisao: carro.proximaRevisao || '—',
-      garantiaStatus: carro.garantiaStatus || '—',
-      garantiaValidade: carro.garantiaValidade || '—',
-      planoManutencao: carro.planoManutencao || '—',
-      imagem: typeof carro.imagem === 'number' ? 'template' : carro.imagem,
-    };
-    router.push({ pathname: '/carro', params: dados });
+    router.push({
+      pathname: '/carro',
+      params: {
+        id: carro.id,
+        nome: carro.nome,
+        ano: carro.ano,
+        cor: carro.cor,
+        placa: carro.placa || '—',
+        km: carro.km || '—',
+        vin: carro.vin || '—',
+        proximaRevisao: carro.proximaRevisao || '—',
+        garantiaStatus: carro.garantiaStatus || '—',
+        garantiaValidade: carro.garantiaValidade || '—',
+        planoManutencao: carro.planoManutencao || '—',
+        imagem: typeof carro.imagem === 'number' ? 'template' : carro.imagem,
+      },
+    });
   };
 
   return (
-    <View style={[styles.container, {backgroundColor: tema.card}]}>
-      <Text style={[styles.title, { color: '#2F8CFF' }]}>Meus Carros Ford</Text>
+    <View style={[styles.container, { backgroundColor: tema.card, borderColor: tema.borda }]}>
+      <View style={styles.tituloLinha}>
+        <Text style={[styles.title, { color: tema.texto }]}>Meus carros Ford</Text>
+        <TouchableOpacity onPress={() => router.push('/carros')}>
+          <Text style={styles.verTodos}>Ver todos</Text>
+        </TouchableOpacity>
+      </View>
 
       <FlatList
         data={carros}
@@ -116,16 +152,9 @@ export default function Carrossel() {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
-        renderItem={({ item }) => (
-          <CarCard
-            item={item}
-            onPress={() => abrirCarro(item)}
-          />
-        )}
+        renderItem={({ item }) => <CarCard item={item} onPress={() => abrirCarro(item)} />}
         ListEmptyComponent={
-          <Text style={[styles.empty, { color: tema.subtitulo }]}>
-            Nenhum carro cadastrado ainda
-          </Text>
+          <Text style={[styles.empty, { color: tema.subtitulo }]}>Nenhum carro cadastrado ainda.</Text>
         }
       />
     </View>
@@ -139,18 +168,30 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 20,
     marginBottom: 20,
+    borderWidth: 1,
+  },
+  tituloLinha: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
   title: {
     fontSize: 18,
     fontWeight: '900',
-    marginBottom: 20,
+  },
+  verTodos: {
+    color: '#1D7DFF',
+    fontSize: 13,
+    fontWeight: '800',
   },
   listContent: {
     paddingRight: 8,
   },
   card: {
     width: 325,
-    borderRadius: 35,
+    minHeight: 166,
+    borderRadius: 22,
     padding: 15,
     marginRight: 12,
     flexDirection: 'row',
@@ -158,11 +199,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   image: {
-    width: 136,
-    height: 136,
-    borderRadius: 20,
+    width: 126,
+    height: 126,
+    borderRadius: 18,
     resizeMode: 'cover',
     marginRight: 10,
+  },
+  semImagem: {
+    backgroundColor: '#E2E8F0',
   },
   info: {
     flex: 1,
@@ -171,7 +215,12 @@ const styles = StyleSheet.create({
   nome: {
     fontSize: 16,
     fontWeight: '700',
-    marginBottom: 6,
+    marginBottom: 4,
+  },
+  badge: {
+    fontSize: 10,
+    fontWeight: '800',
+    marginBottom: 4,
   },
   row: {
     flexDirection: 'row',

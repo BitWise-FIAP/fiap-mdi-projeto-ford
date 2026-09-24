@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from './ThemeContext';
+import { useTheme } from '../src/context/ThemeContext';
 
 export default function EditarPerfil() {
   const { tema } = useTheme();

@@ -1,16 +1,16 @@
 {
-  "name": "achadoseperdidosapp",
+  "name": "ford-vinculo-app",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "ios": "expo start --ios"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
     "expo": "~54.0.33",
+    "expo-constants": "~18.0.14",
     "expo-image-picker": "~17.0.10",
     "expo-linking": "^8.0.11",
     "expo-router": "~6.0.23",

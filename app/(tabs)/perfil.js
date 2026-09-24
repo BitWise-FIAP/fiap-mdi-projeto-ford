@@ -4,15 +4,17 @@ import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useTheme } from '../ThemeContext';
+import { useAuth } from '../../src/context/AuthContext';
+import { useTheme } from '../../src/context/ThemeContext';
 
 export default function Perfil() {
   const { tema } = useTheme();
+  const { isGuest, signOut } = useAuth();
   const router = useRouter();
   const [user, setUser] = useState(null);
 
   const getInitials = (nome) => {
-    if (!nome) return 'VF';
+    if (!nome) return isGuest ? 'CV' : 'US';
     const words = nome.split(' ').filter(w => w.length > 0);
     const initials = words.slice(0, 2).map(w => w[0].toUpperCase()).join('');
     return initials || 'VF';
@@ -50,8 +52,8 @@ export default function Perfil() {
           style: 'destructive',
           onPress: async () => {
             try {
-              await AsyncStorage.removeItem('userToken');
-              router.replace('/login');
+              await signOut();
+              router.replace('/(auth)/index');
             } catch (error) {
               console.log('Erro ao fazer logout:', error);
               Alert.alert('Erro', 'Falha no logout.');
@@ -73,13 +75,15 @@ export default function Perfil() {
         <Text style={styles.avatarText}>{getInitials(user?.nome)}</Text>
         </View>
 
-        <Text style={[styles.nome, { color: tema.texto }]}>{user?.nome || 'Nome'}</Text>
-        <Text style={styles.email}>{user?.email || 'email@exemplo.com'}</Text>
+        <Text style={[styles.nome, { color: tema.texto }]}>{user?.nome || (isGuest ? 'Convidado' : 'Usuário')}</Text>
+        <Text style={[styles.email, { color: tema.subtitulo }]}>{user?.email || (isGuest ? 'Acesso de demonstração' : 'email@exemplo.com')}</Text>
 
-        <TouchableOpacity style={styles.editButton} activeOpacity={0.85} onPress={() => router.push('/editar-perfil')}>
-          <Ionicons name="create-outline" size={16} color="#FFFFFF" />
-          <Text style={styles.editButtonText}>Editar perfil</Text>
-        </TouchableOpacity>
+        {!isGuest && (
+          <TouchableOpacity style={styles.editButton} activeOpacity={0.85} onPress={() => router.push('/editar-perfil')}>
+            <Ionicons name="create-outline" size={16} color="#FFFFFF" />
+            <Text style={styles.editButtonText}>Editar perfil</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <Text style={[styles.sectionTitle, { color: tema.texto }]}>Informações pessoais</Text>
@@ -115,7 +119,7 @@ export default function Perfil() {
           </View>
           <View style={styles.infoTextArea}>
             <Text style={styles.infoLabel}>Telefone</Text>
-            <Text style={[styles.infoValue, { color: tema.texto }]}>{user?.telefone || '(11) 99999-9999}'}</Text>
+            <Text style={[styles.infoValue, { color: tema.texto }]}>{user?.telefone || (isGuest ? 'Não informado' : '(11) 99999-9999')}</Text>
           </View>
         </View>
       </View>
@@ -127,7 +131,7 @@ export default function Perfil() {
           <View style={styles.actionIcon}>
             <Ionicons name="time-outline" size={20} color="#1D7DFF" />
           </View>
-          <Text style={[styles.actionText, , { color: tema.texto }]}>Histórico de solicitações</Text>
+          <Text style={[styles.actionText, { color: tema.texto }]}>Histórico de serviços</Text>
         </View>
         <Ionicons name="chevron-forward" size={20} color="#1D7DFF" />
       </TouchableOpacity>

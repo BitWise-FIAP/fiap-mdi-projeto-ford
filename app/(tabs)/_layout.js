@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../ThemeContext';
+import { useTheme } from '../../src/context/ThemeContext';
 
 export default function TabsLayout() {
   const { tema, modoEscuro } = useTheme();
@@ -37,7 +37,7 @@ export default function TabsLayout() {
         options={{
           title: 'IA',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list" size={size} color={color} />
+            <Ionicons name="sparkles-outline" size={size} color={color} />
           ),
         }}
       />
@@ -47,7 +47,7 @@ export default function TabsLayout() {
         options={{
           title: 'Serviços',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
+            <Ionicons name="construct-outline" size={size} color={color} />
           ),
         }}
       />
@@ -55,9 +55,9 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="cadastro"
         options={{
-          title: 'Cadastro',
+          title: 'Veículo',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="arrow-up-circle-outline" size={size} color={color} />
+            <Ionicons name="add-circle-outline" size={size} color={color} />
           ),
         }}
       />

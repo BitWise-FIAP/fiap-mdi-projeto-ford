@@ -1,113 +1,58 @@
-  import { Stack } from 'expo-router';
-  import { useState, useEffect } from 'react';
-  import {View, ActivityIndicator} from 'react-native';
-  import AsyncStorage from '@react-native-async-storage/async-storage';
-  import { ThemeProvider } from './ThemeContext';
+import { Stack } from 'expo-router';
+import { View, ActivityIndicator } from 'react-native';
+import { AuthProvider, useAuth } from '../src/context/AuthContext';
+import { ThemeProvider, useTheme } from '../src/context/ThemeContext';
 
-  export default function RootLayout() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true);
+function RootNavigator() {
+  const { isAuthenticated, isGuest, loading } = useAuth();
+  const { tema } = useTheme();
+  const hasAccess = isAuthenticated || isGuest;
 
-    useEffect(() => {
-      const checkAuth = async () => {
-        try {
-          const token = await AsyncStorage.getItem('userToken');
-          console.log('TOKEN SALVO:', token);
-          setIsAuthenticated(!!token);
-        } catch (error) {
-          console.log('Erro ao verificar auth:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      checkAuth();
-    }, []);
-
-    
-
-    if (loading) {
-      return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" />
-        </View>
-      );
-    }
-
-    if (!isAuthenticated) {
-      return (
-        <ThemeProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(auth)/index" />
-          <Stack.Screen name="(auth)/login" />
-          <Stack.Screen name="(auth)/cadastro" />
-        </Stack>
-        </ThemeProvider>
-      );
-    }
-
+  if (loading) {
     return (
-      <ThemeProvider>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-
-        <Stack.Screen
-          name="historico"
-          options={{
-            title: 'Histórico de solicitações',
-            headerShown: true,
-          }}
-        />
-
-        <Stack.Screen
-          name="configuracoes"
-          options={{
-            title: 'Configurações da conta',
-            headerShown: true,
-          }}
-        />
-
-        <Stack.Screen
-          name="suporte"
-          options={{
-            title: 'Suporte',
-            headerShown: true,
-          }}
-        />
-
-        <Stack.Screen
-          name="agendamento"
-          options={{
-            headerShown: true,
-            title: 'Agendamento',
-            headerStyle: {
-              backgroundColor: '#020B24',
-            },
-            headerTintColor: '#FFFFFF',
-            headerShadowVisible: false,
-          }}
-        />
-        
-        <Stack.Screen
-          name="carro"
-          options={{
-            title: 'Detalhes do carro',
-            headerShown: true,
-          }}
-        />
-
-        <Stack.Screen
-          name="editar-perfil"
-          options={{
-            title: 'Editar Perfil',
-            headerShown: true,
-          }}
-        />
-
-        <Stack.Screen name="(auth)/index" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)/cadastro" options={{ headerShown: false }} />
-      </Stack>
-      </ThemeProvider>
-      
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: tema.fundo }}>
+        <ActivityIndicator size="large" color="#1D7DFF" />
+      </View>
     );
   }
+
+  if (!hasAccess) {
+    return (
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(auth)/index" />
+        <Stack.Screen name="(auth)/login" />
+        <Stack.Screen name="(auth)/cadastro" />
+      </Stack>
+    );
+  }
+
+  return (
+    <Stack
+      screenOptions={{
+        headerStyle: { backgroundColor: tema.fundo },
+        headerTintColor: tema.texto,
+        headerShadowVisible: false,
+      }}
+    >
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="carros" options={{ title: 'Meus veículos' }} />
+      <Stack.Screen name="recompensas" options={{ title: 'Recompensas' }} />
+      <Stack.Screen name="historico" options={{ title: 'Histórico de serviços' }} />
+      <Stack.Screen name="configuracoes" options={{ title: 'Configurações da conta' }} />
+      <Stack.Screen name="suporte" options={{ title: 'Suporte' }} />
+      <Stack.Screen name="agendamento" options={{ title: 'Agendamento' }} />
+      <Stack.Screen name="carro" options={{ title: 'Meu veículo' }} />
+      <Stack.Screen name="editar-perfil" options={{ title: 'Editar perfil' }} />
+    </Stack>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <ThemeProvider>
+        <RootNavigator />
+      </ThemeProvider>
+    </AuthProvider>
+  );
+}
