@@ -19,6 +19,44 @@ Aplicativo mobile de gestão de veículos Ford, desenvolvido com Expo e React Na
 - Suporte e perguntas frequentes;
 - Tema claro e escuro.
 
+## Demonstração Visual
+
+### Tela de Boas-Vindas
+
+![Tela de Boas-Vindas](./screens/Inicio.png)
+
+### Tela de Login
+
+![Tela de Login](./screens/login.png)
+
+### Tela de Cadastro
+
+![Tela de Cadastro](./screens/cadastro.png)
+
+### Home do Aplicativo
+
+![Home do Aplicativo](./screens/home.png)
+
+### Tela de Inteligência Artificial
+
+![Tela de IA](./screens/ia.png)
+
+### Tela de Serviços
+
+![Tela de Serviços](./screens/servicos.png)
+
+### Tela de Cadastro de Veículo
+
+![Tela de Cadastro de Veículo](./screens/cadastrocarro.png)
+
+### Tela de Perfil
+
+![Tela de Perfil](./screens/perfil.png)
+
+### Demonstração em Vídeo/GIF
+
+![Demonstração do aplicativo](./screens/gif-challenge.gif)
+
 ## Executar localmente
 
 ### Pré-requisitos
